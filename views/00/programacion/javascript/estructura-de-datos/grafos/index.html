@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+     <meta charset="UTF-8">
+     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Grafos</title>
+
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.4/dist/sweetalert2.all.min.js"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.1/p5.min.js"></script>
+
+     <script src="../00Libs/rect-circle-p5-js/lib.js"></script>
+     <script src="../00Libs/matematicas/mate.js"></script>
+
+     <link rel="stylesheet" href="../main.css">
+
+     <meta property="og:site_name" content="Jeffrey Agudelo">
+     <meta property="og:title" content="Jeffrey Agudelo">
+     <meta property="og:description" content="0,1,1,2,3,5,8,13,21,34,...">
+     <meta property="og:image" content="https://i.ibb.co/3vg4KNb/softyo-001.png">
+     <link rel="icon" type="image/png" href="https://i.ibb.co/3vg4KNb/softyo-001.png">
+
+</head>
+
+<body oncontextmenu="return false;">
+     <style>
+          * {
+               transition: all 0.25s;
+          }
+
+          body {
+               margin: 0;
+               padding: 0;
+          }
+
+          #rmenu {
+               border: 1px solid rgba(255, 255, 255, 0.3);
+               background-color: #234;
+               color: white;
+               padding: 0;
+               display: none;
+               flex-direction: column;
+          }
+
+          #rmenu ul {
+               padding: 0;
+               list-style: none;
+          }
+
+          #rmenu a {
+               border: 1px solid rgba(255, 255, 255, 0.1);
+               list-style: none;
+               padding: 3px;
+               font-size: 80%;
+               cursor: pointer;
+          }
+
+          #rmenu a:hover {
+               background: rgba(255, 255, 255, 0.1);
+          }
+
+          canvas {
+               border: 2px solid burlywood;
+          }
+
+          h5 {
+               text-transform: uppercase;
+               font-weight: normal;
+          }
+
+          .th {
+               background-color: black;
+               color: white;
+          }
+
+          table {
+               border: 1px solid rgba(0, 0, 0, 0.5);
+          }
+
+          td {
+               border: 1px solid rgba(0, 0, 0, 0.5);
+               min-width: 50px;
+          }
+
+          .hide {
+               display: none;
+          }
+     </style>
+
+     <div
+          style="background-image: url(https://i.ibb.co/mJ88sjL/blockchain.gif);background-position: 50%;background-size: cover;background-attachment: fixed;">
+          <div
+               style="backdrop-filter: blur(3px);background-color: rgba(0, 0, 0, 0.5);height: 90vh;color: white;text-align: center;display: flex;flex-direction: column;justify-content: center;align-items: center;">
+               <h1 style="font-size: 600%;">
+                    Graf-yz
+               </h1>
+               <br>
+               <div style="text-align: left;width: 80%;min-width: 350px;">
+                    Forma sencilla y ágil de modelar grafos desde una interfaz gráfica para computadora, no es
+                    compatible con
+                    dispositivos tátciles por los controles con el mouse y el teclado.
+               </div>
+          </div>
+     </div>
+
+     <script>
+          deep = "../"
+          document.write(`<script src="` + deep + `utilidades.js"></` + 'script>')
+     </script>
+     <script>
+          //document.write(readText(deep + "00frag_encabezado.html"))
+          document.write(`<script src="` + deep + `insertar-menú-pegajoso.js"></` + 'script>')
+     </script>
+
+     <br>
+
+     <div style="text-align: center;">
+          <a class="btn btn-primary" onclick="
+               if (document.getElementById('tutorial').style.display!='none') {
+                    document.getElementById('tutorial').style.opacity = '0';
+                    setTimeout(() => {
+                         document.getElementById('tutorial').classList.toggle('hide')
+                         document.getElementById('tutorial').style.opacity = '1';
+                    }, 250);
+               }else{
+                    document.getElementById('tutorial').classList.toggle('hide')
+               }
+               ">
+               <i class="fas fa-chalkboard-teacher"></i> Tutorial
+          </a>
+     </div>
+
+     <div style="padding: 20px;" id="tutorial" class="hide">
+          <h3 style="text-align: center;">
+               TUTORIAL
+          </h3>
+          <strong>¿Cómo agregar nodos?</strong>
+          Da clic derecho sobre el área rectangular de abajo para seleccionar las opciones de:
+          <ul>
+               <li><strong>Agregar nodos iniciales</strong> para agregar varios nodos distribuidos en forma circular
+                    <i>(Sólo disponible mientras no hayan nodos en el área).</i>
+               </li>
+               <li><strong>Agregar nodo</strong> para empezar agregando un único nodo.</li>
+          </ul>
+          <strong>¿Cómo mover un nodo?</strong>
+          Con <span class="key">CTRL</span> presionado y el mouse sobre el nodo que deseas mover podrás dar clic y
+          arrastrar a la nueva posición que le quieras dar al nodo. Los nodos no se pueden salir del área rectángular ni
+          reposicionarse encima de otro nodo.
+          <br>
+          <strong>¿Cómo vincular un nodo con otro por medio de una arista?</strong> pon el mouse sobre el nodo, y da
+          clic izquierdo, sin soltar el clic arrastra hasta el nuevo nodo a vincular. para indicar que la arista es
+          bidireccional deja presionada la tecla <span class="key">SHIFT</span> hasta soltar la arista al nodo a
+          vincular.
+          <br>
+          <strong>¿Cómo cambiar la etiqueta de un nodo?</strong> da doble clic sobre el nodo y se abrirá el menú de
+          renombramiento.
+          <br>
+          <strong>¿Cómo reponderar una arista?</strong> ubica el mouse sobre la arista, hasta que esta se recubra de un
+          borde cafecito, cuando esto suceda podrás dar doble clic para que se abra el menú de opciones de arista, ahí
+          aparecerá el input para reponderar la arista
+     </div>
+
+     <br>
+
+     <div style="text-align: center;">
+          <div style="display: inline-block;vertical-align: top;margin: 20px;">
+               <span>
+                    Diametro
+                    <br>
+                    <input type="number" min="50" max="100" value="50" onchange="cambiarDiametro(Number(this.value));">
+               </span>
+          </div>
+
+          <div id="contenedor-canvas" style="display: inline-block;">
+          </div>
+     </div>
+
+     <span id="rmenu">
+          <a id="agregar-nodos-iniciales" onclick="ingresarNodosIniciales()">Agregar nodos iniciales</a>
+          <a onclick="crearNodo(newNodeX,newNodeY)">Agregar nodo</a>
+          <a id="eliminar-nodo" onclick="eliminarNodo()">Eliminar Nodo</a>
+     </span>
+
+     <div style="text-align: center;font-size: 120%;">
+
+          <hr>
+          <h5>Camino más corto</h5>
+
+          <span style="display: inline-block;">
+               <input type="text" id="ndk1" placeholder="Partida">
+          </span>
+          <span style="display: inline-block;">
+               <input type="text" id="ndk2" placeholder="Llegada">
+          </span>
+
+          <a class="btn btn-primary" style="transform: translateY(-5px);"
+               onclick="_Dijkstra(document.getElementById('ndk1').value,document.getElementById('ndk2').value)">
+               Dijkstra <i class="fas fa-play"></i>
+          </a>
+
+          <br>
+
+          <span id="camino"></span>
+
+          <hr>
+          <h5>Conjunto</h5>
+          <div id="conjunto" style="padding: 10px;">
+          </div>
+          <hr>
+          <h5>Lista de aristas</h5>
+          <div id="lista-de-aristas" style="padding: 10px;">
+          </div>
+          <hr>
+          <h5>Matriz de adyacencia</h5>
+          <div id="matriz-de-adyacencia" style="padding: 10px;">
+          </div>
+          <hr>
+          <h5>Matriz de costos</h5>
+          <div id="matriz-de-costos" style="padding: 10px;">
+          </div>
+          <hr>
+          <h5>Matriz de incidencia</h5>
+          <div id="matriz-de-incidencia" style="padding: 10px;">
+          </div>
+
+          <div
+               style="background-image: url(https://i.ibb.co/mJ88sjL/blockchain.gif);background-position: center;background-repeat: no-repeat;background-size: cover;">
+               <div
+                    style="background-color: rgba(0, 0, 0, 0.5);backdrop-filter: blur(3px);color: white;padding: 30px;font-weight: bolder;font-size: 130%;">
+                    <span style="font-weight: lighter;">Desarrollado por</span>
+                    <a href="../index.html" style="text-decoration: none;color: inherit;margin: 5px;">
+                         Jeffrey Agudelo
+                    </a>
+                    <br>
+                    <a class="btn btn-light" target="_blank" href="https://www.youtube.com/c/JeffAportaa"
+                         style="text-decoration: none;color: black;font-weight: normal;box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.5);margin: 5px;">
+                         <i class="fab fa-youtube" style="color: red;"></i> Jeff Aporta
+                    </a>
+               </div>
+          </div>
+     </div>
+
+     <script>
+
+          let DIAMETRO = 50
+
+          let startDijkstra, endDijkstra, globalDikstra = []
+
+          function _Dijkstra(et1, et2) {
+               globalDikstra = []
+               for (const n of nodos) {
+                    if (n.txt == et1) {
+                         startDijkstra = n
+                    }
+                    if (n.txt == et2) {
+                         endDijkstra = n
+                    }
+               }
+               if (!startDijkstra || !endDijkstra) {
+                    return
+               }
+               Dijkstra()
+               costo_minimo = Number.MAX_VALUE
+               for (const g of globalDikstra) {
+                    costo_minimo = Math.min(g.costo, costo_minimo)
+               }
+               globalDikstra = globalDikstra.filter((x) => {
+                    return x.costo == costo_minimo
+               })[0]
+
+               let camino = ""
+               if (globalDikstra) {
+                    for (let i = 0; i < globalDikstra.camino.length; i++) {
+                         const element = globalDikstra.camino[i];
+                         camino += element.txt + (i < globalDikstra.camino.length - 1 ? "→" : "")
+                    }
+                    const y = document.getElementById("defaultCanvas0").getBoundingClientRect().top + window.scrollY;
+                    window.scroll({
+                         top: y - 30,
+                         behavior: 'smooth'
+                    });
+               } else {
+                    camino = "No hay camino"
+               }
+               document.getElementById("camino").innerHTML = camino
+          }
+
+          function Dijkstra(
+               nodo = startDijkstra,
+               camino = [startDijkstra],
+               costo = 0,
+               deep = 0
+          ) {
+               for (const n of nodo.conexiones) {
+                    if (camino.includes(n)) {
+                         continue
+                    }
+                    let copy_camino = [...camino]
+                    copy_camino.push(n)
+                    let arista = buscarArista(n, nodo)
+                    if (n == endDijkstra) {
+                         let dk = {
+                              costo: costo + arista.ponderación,
+                              camino: copy_camino
+                         }
+                         if (deep == 0) {
+                              globalDikstra.push(dk)
+                         }
+                         return dk
+                    } else {
+                         let dk = Dijkstra(
+                              n,
+                              copy_camino,
+                              costo + arista.ponderación,
+                              deep + 1
+                         )
+                         if (dk && dk.camino.includes(startDijkstra) && dk.camino.includes(endDijkstra)) {
+                              globalDikstra.push(dk)
+                         }
+                    }
+               }
+          }
+
+          function cambiarDiametro(nd) {
+               DIAMETRO = nd
+               for (const n of nodos) {
+                    n.shape.d = DIAMETRO
+               }
+          }
+
+          let alfabeto = []
+          for (let i = 65; i <= 90; i++) {
+               alfabeto.push(String.fromCharCode(i))
+          }
+
+          let aristas = []
+
+          function actualizarRepresentaciones() {
+               globalDikstra = []
+               document.getElementById("camino").innerHTML = ""
+
+               let nombres = nodos.map((x) => x.txt)
+               document.getElementById("conjunto").innerHTML = `V={${nombres.toString()}}`
+
+               let listas = []
+               for (const n of nodos) {
+                    for (const c of n.conexiones) {
+                         listas.push([n.txt, c.txt])
+                    }
+               }
+               document.getElementById("lista-de-aristas").innerHTML = `A=${JSON.stringify(listas)
+                    .replaceAll("[", "{")
+                    .replaceAll("]", "}")
+                    }`
+
+               let html = `<table style="margin:auto;"><tbody>`
+               html += `<tr><td class="th"></td>`
+               for (const n of nodos) {
+                    html += `<td class="th">`
+                    html += n.txt
+                    html += `</td>`
+               }
+               html += `</tr>`
+               let i = 0
+               for (const n of nodos) {
+                    html += `<tr><td class="th">${n.txt}</td>`
+                    for (const n2 of nodos) {
+                         html += `<td style="${i % 2 == 0 ? "background:rgba(0,0,0,0.1);" : ""}">`
+                         html += n.conexiones.includes(n2) ? 1 : 0
+                         html += `</td>`
+                    }
+                    html += `</tr>`
+                    i++
+               }
+               html += `</tbody></table>`
+               document.getElementById("matriz-de-adyacencia").innerHTML = html
+
+               let aristaN = 0
+               let nodosUsados = []
+               let aristasProv = []
+               for (const n of nodos) {
+                    for (const n2 of nodos) {
+                         if (n.conexiones.includes(n2)) {
+                              if (!nodosUsados.includes(n2) || !n2.conexiones.includes(n)) {
+                                   let arista = buscarArista(n, n2)
+                                   let p = 1
+                                   if (arista) {
+                                        p = arista.ponderación
+                                   }
+                                   aristasProv.push({
+                                        nombre: "a" + aristaN++,
+                                        ponderación: p,
+                                        nodo1: n,
+                                        nodo2: n2
+                                   })
+                              }
+                         }
+                    }
+                    nodosUsados.push(n)
+               }
+               aristas = aristasProv
+
+               html = `<table style="margin:auto;"><tbody>`
+               html += `<tr><td class="th"></td>`
+               for (const a of aristasProv) {
+                    html += `<td class="th">`
+                    html += a.nombre
+                    html += `</td>`
+               }
+               for (const n of nodos) {
+                    html += `<tr ><td class="th">${n.txt}</td>`
+                    for (const a of aristasProv) {
+                         html += `<td style="${i % 2 == 0 ? "background:rgba(0,0,0,0.1);" : ""}">`
+                         html += a.nodo1 == n || a.nodo2 == n ? 1 : 0
+                         html += `</td>`
+                    }
+                    i++
+                    html += `</tr>`
+               }
+               html += `</tbody></table>`
+               document.getElementById("matriz-de-incidencia").innerHTML = html
+
+               html = `<table style="margin:auto;"><tbody>`
+               html += `<tr><td class="th"></td>`
+               for (const n of nodos) {
+                    html += `<td class="th">`
+                    html += n.txt
+                    html += `</td>`
+               }
+               for (const n of nodos) {
+                    html += `<tr><td class="th">${n.txt}</td>`
+                    for (const n2 of nodos) {
+                         html += `<td style="${i % 2 == 0 ? "background:rgba(0,0,0,0.1);" : ""}">`
+                         if (n == n2) {
+                              html += 0
+                         } else {
+                              let arista = buscarArista(n, n2)
+                              if (arista && n.conexiones.includes(n2)) {
+                                   html += arista.ponderación
+                              } else {
+                                   html += "∞"
+                              }
+                         }
+                         html += `</td>`
+                    }
+                    i++
+                    html += `</tr>`
+               }
+               html += `</tbody></table>`
+               document.getElementById("matriz-de-costos").innerHTML = html
+          }
+
+          class Nodo {
+               constructor(x, y) {
+                    this.shape = new Circle(x, y, DIAMETRO)
+                    for (const a of alfabeto) {
+                         let nombrar = true
+                         for (const n of nodos) {
+                              if (n.txt == a) {
+                                   nombrar = false
+                                   break
+                              }
+                         }
+                         if (nombrar) {
+                              this.txt = a
+                              break
+                         }
+                    }
+                    this.conexiones = []
+                    actualizarRepresentaciones()
+               }
+
+               desconectar(node) {
+                    if (node == this) {
+                         return
+                    }
+                    let i = this.conexiones.indexOf(node)
+                    if (i < 0) {
+                         return
+                    }
+                    this.conexiones.splice(i, 1)
+                    actualizarRepresentaciones()
+               }
+
+               conectar(node) {
+                    if (node == this) {
+                         return
+                    }
+                    if (this.conexiones.includes(node)) {
+                         return
+                    }
+                    this.conexiones.push(node)
+                    actualizarRepresentaciones()
+               }
+
+               conectarDoble(node) {
+                    if (node == this) {
+                         return
+                    }
+                    if (this.conexiones.includes(node)) {
+                         return
+                    }
+                    this.conexiones.push(node)
+                    node.conectar(this)
+               }
+
+               get mouseOver() {
+                    return this.shape.collidePoint(TmouseX, TmouseY)
+               }
+
+               draw() {
+                    if (this.mouseOver) {
+                         fill("#E3CAA5")
+                         if (keyIsDown(CONTROL)) {
+                              cursor(MOVE)
+                         }
+                    } else {
+                         fill("#CEAB93")
+                    }
+                    strokeWeight(5)
+                    stroke("#AD8B73")
+                    if (globalDikstra?.camino?.includes(this)) {
+                         stroke("#78AD73")
+                         fill("#ACCE93")
+                    }
+                    this.shape.draw()
+                    fill("black")
+                    noStroke()
+                    text(this.txt, this.shape.x, this.shape.y)
+               }
+
+               drawConections() {
+                    for (const c of this.conexiones) {
+                         if (c.conexiones.includes(this)) {
+                              stroke("crimson")
+                              fill("red")
+                         } else {
+                              stroke("black")
+                              fill("black")
+                         }
+                         if (globalDikstra?.camino) {
+                              let i1 = globalDikstra.camino.indexOf(this)
+                              let i2 = globalDikstra.camino.indexOf(c)
+                              if (i1 != -1 && i2 != -1) {
+                                   if (Math.abs(i1 - i2) == 1) {
+                                        stroke("green")
+                                        fill("#ACCE93")
+                                   }
+                              }
+                         }
+
+                         let proy = determinarProyección(this.shape.center, c.shape.center, { x: TmouseX, y: TmouseY })
+                         if (proy.d < 10 && proy.k > 0.1 && proy.k <= 0.9) {
+                              nodeAconect = this
+                              nodeBconect = c
+                         }
+                         line(this.shape.x, this.shape.y, c.shape.x, c.shape.y)
+                         push()
+                         let x = (this.shape.x - c.shape.x)
+                         let y = (this.shape.y - c.shape.y)
+                         let d = (x * x + y * y) ** .5
+                         x /= d
+                         y /= d
+                         x *= c.shape.r
+                         y *= c.shape.r
+                         let a = Math.atan2(y, x)
+                         x += c.shape.x
+                         y += c.shape.y
+
+                         translate(x, y)
+                         rotate(a + PI)
+
+                         beginShape()
+                         vertex(0, 0)
+                         vertex(-10, 2.5)
+                         vertex(-10, -2.5)
+                         endShape(CLOSE)
+                         pop()
+                    }
+               }
+          }
+
+          let nodeAconect
+          let nodeBconect
+          let nodo1
+          let nodo2
+          let nodoMove
+
+          function buscarArista(nodo1, nodo2) {
+               let n = [nodo1, nodo2]
+               for (const a of aristas) {
+                    if (n.includes(a.nodo1) && n.includes(a.nodo2)) {
+                         return a
+                    }
+               }
+          }
+
+          async function editarConexión(nodo1, nodo2) {
+               let arista = buscarArista(nodo1, nodo2)
+               let { value: valor } = await Swal.fire({
+                    html: `
+                    <label>
+                         <input type="checkbox" id="cbox1" ${nodo1.conexiones.includes(nodo2) ? "checked" : ""}>
+                         ${nodo1.txt} → ${nodo2.txt}
+                    </label>
+                    <br>
+                    <label>
+                         <input type="checkbox" id="cbox2" ${nodo2.conexiones.includes(nodo1) ? "checked" : ""}>
+                         ${nodo2.txt} → ${nodo1.txt}
+                    </label>
+                    <br>
+                    <input type="number" id="input-number" value="${arista.ponderación}">
+                    `,
+                    preConfirm: () => {
+                         return {
+                              conexión1: document.getElementById("cbox1").checked,
+                              conexión2: document.getElementById("cbox2").checked,
+                              ponderación: Number(document.getElementById("input-number").value),
+                         }
+                    }
+               })
+               if (valor) {
+                    arista.ponderación = valor.ponderación
+                    if (valor.conexión1) {
+                         nodo1.conectar(nodo2)
+                    } else {
+                         nodo1.desconectar(nodo2)
+                    }
+                    if (valor.conexión2) {
+                         nodo2.conectar(nodo1)
+                    } else {
+                         nodo2.desconectar(nodo1)
+                    }
+                    actualizarRepresentaciones()
+               }
+          }
+
+          function mouseDragged() {
+               if (nodoMove) {
+                    let copy = nodoMove.shape.copy()
+                    copy.move(
+                         constrain(TmouseX, -width / 2 + DIAMETRO / 2, width / 2 - DIAMETRO / 2),
+                         constrain(TmouseY, -height / 2 + DIAMETRO / 2, height / 2 - DIAMETRO / 2)
+                    )
+                    let mover = true
+                    for (const n of nodos) {
+                         if (n == nodoMove) {
+                              continue
+                         }
+                         let s = n.shape.copy()
+                         s.d += 20
+                         if (copy.collideCircle(s)) {
+                              mover = false
+                              break
+                         }
+                    }
+                    if (mover) {
+                         nodoMove.shape = copy
+                    }
+               }
+          }
+
+          function mousePressed() {
+               for (const n of nodos) {
+                    if (n.mouseOver) {
+                         if (keyIsDown(CONTROL)) {
+                              nodoMove = n
+                         } else {
+                              nodo1 = n
+                         }
+                         return
+                    }
+               }
+          }
+
+          function mouseReleased() {
+               nodoMove = undefined
+               if (!nodo1) {
+                    return
+               }
+               for (const n of nodos) {
+                    if (n.mouseOver) {
+                         if (keyIsDown(SHIFT)) {
+                              nodo1.conectarDoble(n)
+                         } else {
+                              nodo1.conectar(n)
+                         }
+                         break
+                    }
+               }
+               nodo1 = undefined
+          }
+
+          async function doubleClicked() {
+               for (const n of nodos) {
+                    if (n.mouseOver) {
+                         let { value: valor } = await Swal.fire({
+                              title: "Nombre",
+                              input: "text",
+                              inputValue: n.txt,
+                         })
+                         if (valor) {
+                              n.txt = valor
+                              actualizarRepresentaciones()
+                         }
+                         return
+                    }
+               }
+               if (nodeAconect && nodeBconect) {
+                    editarConexión(nodeAconect, nodeBconect)
+                    return
+               }
+          }
+
+          let newNodeX, newNodeY, nodoEliminar
+
+          function windowResized() {
+               s = 0.95 * windowWidth / width;
+               if (s > 1) {
+                    s = 1
+               }
+               canvas.style("width", width * s + "px");
+               canvas.style("height", height * s + "px");
+               canvas.style("transform-origin", "0 0");
+          }
+
+          function setup() {
+               canvas = createCanvas(900, 600)
+               windowResized()
+               canvas.parent("contenedor-canvas")
+               textAlign(CENTER, CENTER)
+               textSize(20)
+               let canvasAux = document.getElementById("defaultCanvas0");
+               canvasAux.style.display = "inline-block"
+               canvasAux.addEventListener('contextmenu', function (e) {
+                    menu = document.getElementById("rmenu")
+                    menu.style.display = "flex"
+                    menu.style.position = "absolute"
+                    menu.style.left = e.pageX + "px"
+                    menu.style.top = e.pageY + "px"
+                    newNodeX = TmouseX
+                    newNodeY = TmouseY
+                    for (const n of nodos) {
+                         if (n.mouseOver) {
+                              nodoEliminar = n
+                              break
+                         }
+                    }
+                    actualizarMenúContextual()
+                    e.preventDefault();
+               }, false);
+               document.addEventListener("click", () => {
+                    menu = document.getElementById("rmenu")
+                    if (menu.style.display == "flex") {
+                         menu.style.display = "none"
+                         nodoEliminar = undefined
+                    }
+                    actualizarMenúContextual()
+               })
+               nodosGenerar = 7
+               nodos = []
+          }
+
+          async function ingresarNodosIniciales() {
+               let { value: nodosGenerar } = await Swal.fire({
+                    title: "Cantidad de nodos Iniciales",
+                    input: "number",
+                    inputAttributes: {
+                         min: 2,
+                         max: 12,
+                         step: 1
+                    },
+                    inputValue: 5,
+               })
+               if (!nodosGenerar || nodosGenerar < 2) {
+                    return
+               }
+               if (nodosGenerar > 12) {
+                    nodosGenerar = 12
+               }
+               for (let i = 0; i < nodosGenerar; i++) {
+                    let a = i * 2 * PI / nodosGenerar
+                    nodos.push(new Nodo(250 * cos(a), 250 * sin(a)))
+               }
+               actualizarMenúContextual()
+          }
+
+          function crearNodo(x, y) {
+               nodos.push(new Nodo(x, y))
+               actualizarMenúContextual()
+          }
+
+          function eliminarNodo() {
+               nodos.splice(nodos.indexOf(nodoEliminar), 1)
+               for (const n of nodos) {
+                    n.conexiones.splice(n.conexiones.indexOf(nodoEliminar), 1)
+               }
+          }
+
+          function actualizarMenúContextual() {
+               if (nodos.length) {
+                    document.getElementById("agregar-nodos-iniciales").style.display = "none"
+               } else {
+                    document.getElementById("agregar-nodos-iniciales").style.display = "block"
+               }
+               if (nodoEliminar) {
+                    document.getElementById("eliminar-nodo").style.display = "block"
+               } else {
+                    document.getElementById("eliminar-nodo").style.display = "none"
+               }
+          }
+
+          function draw() {
+               clear()
+               translate(width / 2, height / 2)
+
+               cursor(ARROW)
+
+               if (nodeAconect && nodeBconect) {
+                    stroke("BurlyWood")
+                    strokeWeight(5)
+                    line(
+                         nodeAconect.shape.x,
+                         nodeAconect.shape.y, nodeBconect.shape.x, nodeBconect.shape.y
+                    )
+                    cursor(HAND)
+               }
+
+               nodeAconect = undefined
+               nodeBconect = undefined
+
+               TmouseX = mouseX - width / 2
+               TmouseY = mouseY - height / 2
+
+               if (!nodos.length) {
+                    background(255)
+                    fill(0)
+                    text("Presiona clic derecho para desplegar las opciones", 0, 0)
+               }
+
+
+               if (nodo1) {
+                    if (keyIsDown(SHIFT)) {
+                         stroke("crimson")
+                    } else {
+                         stroke("black")
+                    }
+                    line(nodo1.shape.x, nodo1.shape.y, TmouseX, TmouseY)
+               }
+
+               strokeWeight(1)
+
+               noStroke()
+               fill(0)
+               for (const a of aristas) {
+                    push()
+                    textSize(15)
+                    let vx = a.nodo1.shape.x - a.nodo2.shape.x
+                    let vy = a.nodo1.shape.y - a.nodo2.shape.y
+                    let r = (vx * vx + vy * vy) ** .5
+                    vx /= r
+                    vy /= r
+                    vx *= 20
+                    vy *= 20
+                    translate(
+                         (a.nodo1.shape.x + a.nodo2.shape.x) / 2 + (vx < 0 ? -1 : 1) * vy,
+                         (a.nodo1.shape.y + a.nodo2.shape.y) / 2 - (vx < 0 ? -1 : 1) * vx
+                    )
+                    let angle = Math.atan2(vy, vx)
+                    rotate(vx < 0 ? angle + PI : angle)
+                    text(
+                         a.ponderación != 1 ? a.nombre + " = " + a.ponderación : a.nombre,
+                         0,
+                         0
+                    )
+                    pop()
+               }
+
+               for (const n of nodos) {
+                    n.drawConections()
+               }
+
+               push()
+               for (const n of nodos) {
+                    n.draw()
+               }
+               pop()
+
+               /* fill("black")
+               circle(TmouseX, TmouseY, 5) */
+          }
+     </script>
+
+</body>
+
+</html>

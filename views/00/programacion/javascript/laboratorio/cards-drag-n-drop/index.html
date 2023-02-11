@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+     <title>Cards drag n drop</title>
+
+     <meta charset="UTF-8">
+     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+     <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+
+     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.3.0/dist/sweetalert2.all.min.js"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.2/p5.min.js"></script>
+
+     <meta property="og:site_name" content="Cards drag n drop">
+     <meta property="og:title" content="Cards drag n drop">
+     <meta property="og:description" content="Librería para mover elementos en un listado">
+     <meta property="og:image" content="https://i.ibb.co/3vg4KNb/softyo-001.png">
+     <link rel="icon" type="image/png" href="https://i.ibb.co/3vg4KNb/softyo-001.png">
+</head>
+
+<body>
+     <style>
+          * {
+               transition: all 0.25s;
+          }
+
+          body {
+               margin: 0;
+               padding: 0;
+               display: flex;
+               justify-content: center;
+               align-items: center;
+               min-height: 100vh;
+          }
+
+          .cards-body {
+               position: relative;
+               user-select: none;
+               min-width: 300px;
+          }
+
+          .card-item {
+               position: absolute;
+               text-align: center;
+               padding: 10px;
+               border: 1px solid black;
+               width: 300px;
+               height: 50px;
+               background: plum;
+          }
+
+          .card-vertical-btn {
+               display: inline-flex;
+               justify-content: center;
+               align-items: center;
+               position: absolute;
+               right: 0;
+               top: 0;
+               height: 100%;
+               width: 30px;
+               background-color: rgba(0, 0, 0, 0.4);
+          }
+     </style>
+
+     <div class="cards-body" id="cards-1">
+     </div>
+
+     <script>
+
+          estructurarCuerpoCartas(
+               "cards-1",
+               ["A", "B", "C", "D"]
+          )
+
+          function estructurarCuerpoCartas(id, contents) {
+               let cards = document.getElementById(id)
+               let html = ""
+               ids_cards = []
+               let i = 0
+               for (const c of contents) {
+                    let rnd = (Math.random() + "").replace("0.", "")
+                    let id_card_item = "item-" + rnd
+                    let id_card_move_btn = "btn-" + rnd
+                    ids_cards.push({
+                         id_card_item,
+                         id_card_move_btn
+                    })
+                    let html_item = `<div class='card-item' id='${id_card_item}' data-index='${i++}'>`
+                    html_item += c
+                    html_item += "</div>"
+                    html += html_item
+               }
+               cards.innerHTML = html
+               cards.style.height = (cards.childNodes.length * 50) + "px"
+               for (const ids of ids_cards) {
+                    item = document.getElementById(ids.id_card_item)
+                    dragElement(ids);
+                    item.style.top = (item.dataset.index * 50) + "px"
+               }
+          }
+
+          function dragElement(ids) {
+               var pos1 = 0, pos2 = 0, dx = 0, dy = 0;
+               let item = document.getElementById(ids.id_card_item)
+
+               item.onmousedown = dragMouseDown;
+
+               function dragMouseDown(e) {
+                    e = e || window.event;
+                    e.preventDefault();
+                    dx = e.pageX - item.offsetLeft - item.parentNode.offsetLeft;
+                    dy = e.pageY - item.offsetTop - item.parentNode.offsetTop;
+                    document.onmouseup = closeDragElement;
+                    document.onmousemove = elementDrag;
+                    item.parentNode.appendChild(item)
+               }
+
+               let t0 = performance.now()
+               let t1 = performance.now()
+
+               function elementDrag(e) {
+                    if (t1 - t0 < 1000 / 20) {
+                         t1 = performance.now()
+                         return
+                    }
+                    e = e || window.event;
+                    e.preventDefault();
+                    // item.style.left = (e.pageX - item.parentNode.offsetLeft - dx) + "px";
+                    item.style.left = 0;
+                    item.style.top = (e.pageY - item.parentNode.offsetTop - dy) + "px";
+                    t0 = performance.now()
+
+                    let r1 = item.getBoundingClientRect();
+                    let r2 = item.parentNode.getBoundingClientRect();
+                    let posY = r1.top - r2.top + dy
+                    item.dataset.index = Math.floor(posY / 50)
+                    if (item.dataset.index < 0) {
+                         item.dataset.index = 0
+                    }
+                    if (item.dataset.index >= item.parentNode.childNodes.length) {
+                         item.dataset.index = item.parentNode.childNodes.length - 1
+                    }
+                    let i = 0
+                    let childs = Array.from(item.parentNode.childNodes)
+                    childs.sort((a, b) => {
+                         let r1 = a.getBoundingClientRect();
+                         let r2 = b.getBoundingClientRect();
+                         return r1.top - r2.top
+                    })
+                    for (const c of childs) {
+                         if (c == item) {
+                              continue
+                         }
+                         if (i == item.dataset.index) {
+                              i++
+                         }
+                         c.dataset.index = i++
+                         c.style.top = (c.dataset.index * 50) + "px"
+                    }
+
+               }
+
+               function closeDragElement() {
+                    document.onmouseup = null;
+                    document.onmousemove = null;
+                    let r1 = item.getBoundingClientRect();
+                    let r2 = item.parentNode.getBoundingClientRect();
+                    let posX = r1.left - r2.left + dx
+                    let posY = r1.top - r2.top + dy
+                    item.dataset.index = Math.floor(posY / 50)
+                    if (item.dataset.index < 0) {
+                         item.dataset.index = 0
+                    }
+                    if (item.dataset.index >= item.parentNode.childNodes.length) {
+                         item.dataset.index = item.parentNode.childNodes.length - 1
+                    }
+                    item.style.top = (item.dataset.index * 50) + "px"
+               }
+          }
+
+     </script>
+
+</body>
+
+</html>

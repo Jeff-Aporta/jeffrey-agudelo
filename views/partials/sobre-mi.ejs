@@ -1,0 +1,179 @@
+<style>
+    .nav-link:hover {
+        background: rgba(47, 79, 79, 0.2);
+        color: gray;
+    }
+
+    .nav-link:not(.active){
+        color: steelblue;
+        border-right: 1px solid lightgray;
+    }
+
+    .nav-item button{
+        font-weight: bolder;
+        font-size: 150%;
+        color: gray;
+    }
+
+    #content-yo{
+        padding: 20px;
+        background: white;
+        border-right: 1px solid lightgray;
+        border-bottom: 1px solid lightgray;
+        border-left: 1px solid lightgray;
+    }
+</style>
+<ul class="nav nav-tabs" id="tabs-yo" role="tablist">
+    <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="tab-desc-person" data-bs-toggle="tab" data-bs-target="#content-desc-person" type="button" role="tab" aria-controls="content-desc-person" aria-selected="true">
+                Descripción personal
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="tab-map-hab" data-bs-toggle="tab" data-bs-target="#content-map-hab" type="button" role="tab" aria-controls="content-map-hab" aria-selected="false" onclick="setTimeout(responsiveD3JS, 100);">
+                Mapa de habilidades
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="tab-fotos" data-bs-toggle="tab" data-bs-target="#content-fotos" type="button" role="tab" aria-controls="content-fotos" aria-selected="false">
+            Fotos
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="tab-contact" data-bs-toggle="tab" data-bs-target="#content-contact" type="button" role="tab" aria-controls="content-contact" aria-selected="false">
+            Contacto
+        </button>
+    </li>
+</ul>
+<div class="tab-content" id="content-yo">
+    <div class="tab-pane fade show active" id="content-desc-person" role="tabpanel" aria-labelledby="tab-desc-person" >
+        <h4>
+            Desarrollador de Software
+        </h4>
+        Tengo una amplia experiencia en encontrar soluciones matemáticas eficientes y me destaco por el rendimiento de mis proyectos. Además, tengo un fuerte conocimiento en computación gráfica y estoy constantemente buscando nuevas formas de mejorar mis habilidades y aprender sobre las últimas tendencias en el campo.
+        <br> <br>
+        <h4>
+            Pasión por la Enseñanza de Algoritmos
+        </h4>
+        Además de mi experiencia en el desarrollo de software, tengo un gran interés en la enseñanza de algoritmos y he creado un canal de YouTube para compartir mis conocimientos. Quiero ayudar a la comunidad a comprender y apreciar los algoritmos y la programación de una manera clara y accesible.
+        <br> <br>
+        <center>
+            <a href="https://www.youtube.com/@JeffAportaa" style="font-size: 200%;color: black;text-decoration: none;display: inline-flex;align-items: center;justify-content: center;border: 1px solid lightgray;padding: 10px; border-radius: 10px;">
+                <i class="fab fa-youtube" style="color: red;font-size: 150%;"></i> &nbsp; Jeff Aporta
+            </a>
+        </center>
+        <br> <br>
+        <h4>
+            Valores y Estilo de Vida
+        </h4>
+        Me considero una persona de valores y principios sólidos, soy pentecostal y llevo una vida saludable, no fumo, no bebo alcohol, estoy casado y no tengo hijos. Me gusta mucho dibujar y pintar, y disfruto pasar tiempo en casa. Soy una persona de pocos amigos, pero los selecciono muy bien, y tengo un alto compromiso con mis actividades.
+        <br> <br>
+        <h4>
+            Compromiso y Confiabilidad
+        </h4>
+        Mi experiencia, habilidades y valores me hacen ser un desarrollador confiable y comprometido con sus actividades y con una vida equilibrada y saludable. Pueden contar conmigo para encontrar soluciones eficientes y completar proyectos a un alto nivel de calidad.
+    </div>
+    <div class="tab-pane fade" id="content-map-hab" role="tabpanel" aria-labelledby="tab-map-hab" >
+        <%- include("graf-habilidades.ejs") %> 
+    </div>
+    <div class="tab-pane fade" id="content-fotos" role="tabpanel" aria-labelledby="tab-fotos" >
+    </div>
+    <div class="tab-pane fade" id="content-contact" role="tabpanel" aria-labelledby="tab-contact" >
+        <i class="fa-solid fa-mobile-screen-button"></i> <i class="fa-brands fa-whatsapp"></i> (+57) 3160463618
+        <br>
+        <i class="fa-regular fa-envelope"></i> Jeffaporta@gmail.com
+        <br>
+        <i class="fa-solid fa-location-dot"></i> Cali
+    </div>
+</div>
+
+<br>
+<br>
+<style>
+    .miniatura {
+        width: 200px;
+        height: 200px;
+        margin: 10px;
+        object-fit: cover;
+        cursor: pointer;
+    }
+</style>
+<script>
+    {
+        let html = `
+            <center>
+        `;
+        [
+        "https://i.ibb.co/j8bPTtW/00000-981784955-wallpaper-elec.png",
+        "https://i.ibb.co/m8x4xGg/00003-211110304-wallpaper-elec.png",
+        "https://i.ibb.co/5rMvHT5/00008-2297074801-wallpaper-mus.png",
+        "https://i.ibb.co/CPJ3hXQ/00021-4089163523-Wallpaper-pop.png",
+        "https://i.ibb.co/JxWdFmt/00022-4089163530-Wallpaper-pop.png",
+        "https://i.ibb.co/Th79Yzy/00030-3190627773-Wallpaper-pop.png",
+        "https://i.ibb.co/MVGxpmg/Whats-App-Image-2023-01-17-at-3-04-35-PM-2.jpg",
+        ].forEach(e =>{
+            html+= `<img class="miniatura" src="${e}" data-lightbox-group="1">`;
+        })
+        html += `
+            </center>
+        `;
+        document.getElementById("content-fotos").innerHTML = html;
+    }
+
+    lightbox_update_style({
+        background: "rgba(0,0,0,0.5)",
+        background2: "rgba(0,0,0,0.5)",
+        colorButtons: "white",
+        colorBorder: "black",
+    })
+
+    setTimeout(() => {
+        lightbox_load()
+    }, 0);
+</script>
+
+<hr>
+
+
+<div>
+    <div style="padding: 20px;">
+        <%- include("sobre-mi-01.ejs") %> 
+    </div>
+    <hr>
+    <div style="padding: 20px;">
+        <%- include("sobre-mi-02.ejs") %> 
+    </div>
+    <hr>
+    <div style="background: hsl(150, 100%, 80%);padding: 20px;">
+        <%- include("sobre-mi-03.ejs") %> 
+    </div>
+    <hr>
+    <div style="background: hsl(200, 100%, 80%);padding: 20px;">
+        <%- include("sobre-mi-04.ejs") %> 
+    </div>
+</div>
+<script>
+    document.querySelectorAll(".auto-ver-mas").forEach(e=>{
+        let id = (Math.random()+"").replaceAll("0.","id-")
+        let saltos = e.innerHTML.split("<br>")
+        let primerParrafo = saltos.shift()
+        let resto = saltos.join("<br>")
+        e.innerHTML = primerParrafo
+        e.innerHTML += `<div class="ver-mas" style="display: none;" id="content-ver-mas-${id}">${resto}</div>`
+        e.innerHTML += `
+            <div class="ver-mas" style="display: inline;"> 
+                <a 
+                    href="javascript:void(0)" 
+                    id="btn-ver-mas-${id}"
+                    class="btn btn-light"
+                    onclick="
+                        this.style.display='none';
+                        document.getElementById('content-ver-mas-${id}').style.display='';
+                    "
+                >
+                    Ver más
+                </a>
+            </div>`
+    })
+</script>
+<br> 

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+     <title>Calculadora</title>
+
+     <meta charset="UTF-8">
+     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+     <meta property="og:site_name" content="Calculadora">
+     <meta property="og:title" content="Calculadora">
+     <meta property="og:description" content="Muy Básica">
+     <meta property="og:image" content="https://i.ibb.co/3vg4KNb/softyo-001.png">
+     <link rel="icon" type="image/png" href="https://i.ibb.co/3vg4KNb/softyo-001.png">
+
+     <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+     <div id="contenedor-calculadora">
+          <div id="operacion">
+          </div>
+          <input type="button" value="C" class="esp" onclick="document.getElementById('operacion').innerHTML = ''">
+          <input type="button" value="E" class="esp" onclick="
+          let op = document.getElementById('operacion').innerHTML;
+          document.getElementById('operacion').innerHTML = op.substring(0,op.length-1)
+          ">
+          <br>
+          <input type="button" value="7" class="num"
+               onclick="document.getElementById('operacion').innerHTML += this.value">
+          <input type="button" value="8" class="num"
+               onclick="document.getElementById('operacion').innerHTML += this.value">
+          <input type="button" value="9" class="num"
+               onclick="document.getElementById('operacion').innerHTML += this.value">
+          <input type="button" value="*" class="op" onclick="document.getElementById('operacion').innerHTML += this.value">
+          <br>
+          <input type="button" value="4" class="num" onclick="document.getElementById('operacion').innerHTML += this.value">
+          <input type="button" value="5" class="num" onclick="document.getElementById('operacion').innerHTML += this.value">
+          <input type="button" value="6" class="num" onclick="document.getElementById('operacion').innerHTML += this.value">
+          <input type="button" value="/" class="op" onclick="document.getElementById('operacion').innerHTML += this.value">
+
+          <br>
+          <input type="button" value="1" class="num" onclick="document.getElementById('operacion').innerHTML += this.value">
+          <input type="button" value="2" class="num" onclick="document.getElementById('operacion').innerHTML += this.value">
+          <input type="button" value="3" class="num" onclick="document.getElementById('operacion').innerHTML += this.value">
+          <input type="button" value="+" class="op" onclick="document.getElementById('operacion').innerHTML += this.value">
+          <br>
+          <input type="button" value="=" class="eq"
+               onclick="document.getElementById('operacion').innerHTML = eval(document.getElementById('operacion').innerHTML)">
+          <input type="button" value="0" class="num" onclick="document.getElementById('operacion').innerHTML += this.value">
+          <input type="button" value="." class="num" onclick="document.getElementById('operacion').innerHTML += this.value">
+          <input type="button" value="-" class="op" onclick="document.getElementById('operacion').innerHTML += this.value">
+     </div>
+
+</body>
+
+</html>

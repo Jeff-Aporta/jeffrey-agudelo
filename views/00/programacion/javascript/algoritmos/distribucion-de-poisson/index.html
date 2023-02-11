@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+     <meta charset="UTF-8">
+     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Distribución de Poisson</title>
+
+
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.1/p5.min.js"></script>
+
+     <script src="../00Libs/nerdamer/nerdamer.core.js"></script>
+     <script src="../00Libs/nerdamer/Algebra.js"></script>
+     <script src="../00Libs/nerdamer/Calculus.js"></script>
+     <script src="../00Libs/nerdamer/Solve.js"></script>
+     <script src="../00Libs/nerdamer/Extra.js"></script>
+     <script src="../00Libs/nerdamer/nerdamer_español.js"></script>
+
+</head>
+
+<body>
+
+     <style>
+          * {
+               transition: all 0.25s;
+          }
+
+          body {
+               text-align: center;
+               margin: 0;
+               padding: 0;
+          }
+
+          .stop-scrolling {
+               height: 100%;
+               overflow: hidden;
+          }
+
+          canvas {
+               border: 2px solid black;
+          }
+
+          .fondo {
+               background-image: url(https://i.ibb.co/LnBWS1R/0-LQwjc-Ay-APf-DYtjxv.gif);
+               background-position: center;
+               background-repeat: no-repeat;
+               background-size: cover;
+          }
+     </style>
+
+     <div class="fondo">
+          <div style="color: white;text-shadow: 2px 2px black;">
+               <div
+                    style="background: rgba(0, 0, 0, 0.5);backdrop-filter: blur(3px);display: flex;flex-direction: column;justify-content: center;align-items: center;height: 90vh;">
+                    <h1 style="line-height: 120%;text-align: center;padding: 20px;">
+                         <span style="font-size: 120%;">
+                              Distribución <span style="font-weight: lighter;">de</span>
+                              <br>
+                              <strong style="font-size: 200%;">Poisson</strong>
+                         </span>
+                    </h1>
+                    <div style="text-align: center;">
+                         <img src="https://i.ibb.co/GPNZQkZ/poisson.png"
+                              style="width: 200px;filter: invert(1) hue-rotate(180deg) brightness(2);">
+                    </div>
+               </div>
+          </div>
+     </div>
+
+     <script>
+          deep = "../"
+          document.write(`<script src="` + deep + `utilidades.js"></` + 'script>')
+     </script>
+     <script>
+          //document.write(readText(deep + "00frag_encabezado.html"))
+          document.write(`<script src="` + deep + `insertar-menú-pegajoso.js"></` + 'script>')
+     </script>
+
+     <div style="padding: 30px;">
+          <div style="margin: 20px;display: inline-block;text-align: left;width: 400px;">
+               <strong style="color: crimson;">Probabilidad de ocurrencia</strong>
+               <br>
+               es la misma para cualquiera de los intervalos de igual longitud
+               <br>
+               <br>
+               <img src="https://latex.codecogs.com/svg.image?\Huge&space;\lambda&space;">
+               =
+               <input type="number" step="0.1" min="0" max="16" id="lambda" onchange="repos()" onkeyup="repos()">
+               <br>
+               <br>
+               por limitaciones computacionales, no ingrese números mayores a 16.
+               <br>
+               ya que 16! es apróximadamente:
+               <br>
+               20922789888000
+               <br>
+               esto rebasa la capacidad de representación númerica normal en los ordenadores
+               <br>
+               <br>
+               <hr>
+               <strong style="color: crimson;">Variable aleatoria</strong>
+               <br>
+               Número de veces que ocurre un evento <strong style="color: deepskyblue;">Durante un intervalo
+                    definido</strong>
+               <br>
+               <br>
+               <img src="https://latex.codecogs.com/svg.image?\Huge&space;x&space;">
+               =
+               <input type="number" step="1" min="0" id="x" onchange="repos()" onkeyup="repos()">
+               <br>
+               <br>
+               <img id="F-resultado" src="https://latex.codecogs.com/svg.image?\large&space;P(x)=\_\_\_">
+               <br>
+               <br>
+               <hr>
+               <strong style="color: lightseagreen; font-size: 120%;">Ecuación</strong>
+               <br>
+               <img id="f-latex">
+               <br>
+               <br>
+          </div>
+     
+          <div style="display: inline-block;vertical-align: top; padding: 20px;" id="contenedor-canvas">
+          </div>
+     </div>
+
+     <div class="fondo">
+          <div
+               style="background-color: rgba(0, 0, 0, 0.5);backdrop-filter: blur(3px);color: white;padding: 30px;height: 50vh;font-weight: bolder;font-size: 130%;display: flex;flex-direction: column;justify-content: center;align-items: center;">
+               <span>
+                    <span style="font-weight: lighter;">Desarrollado por</span>
+                    <a href="../index.html" style="text-decoration: none;color: inherit;margin: 5px;">
+                         <strong>Jeffrey Agudelo</strong>
+                    </a>
+               </span>
+               <br>
+               <a class="btn btn-light" target="_blank" href="https://www.youtube.com/c/JeffAportaa"
+                    style="text-decoration: none;color: black;font-weight: normal;box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.5);margin: 5px;">
+                    <i class="fab fa-youtube" style="color: red;"></i> Jeff Aporta
+               </a>
+          </div>
+     </div>
+
+     <script>
+
+          ESCALA_X = 20
+          ESCALA_Y = 240
+          TX = 0
+          TY = 0
+          focusCanvas = false
+
+          function repos() {
+               x = Number(document.getElementById("x").value)
+               lambda = Number(document.getElementById("lambda").value)
+
+               if (lambda) {
+                    TX = width / 2 - ESCALA_X * Number(document.getElementById("lambda").value);
+                    if (!Number.isNaN(x)) {
+                         try {
+                              f = Number(nerdamer(`P(${x},${lambda})`).evaluate())
+
+                              document.getElementById("F-resultado").src = `
+                              https://latex.codecogs.com/svg.image?&space;P(${x})=` + nerdamer(`P(${x},${lambda})`).toTeX() + `= `
+                                   +
+                                   Math.floor(f * 10000) / 10000 + " (" + Math.floor(f * 10000) / 100 + "%)"
+
+                         } catch (error) {
+                              console.log(error)
+                         }
+                    }
+               }
+          }
+
+          function setup() {
+               canvas = createCanvas(500, 500)
+               canvas.parent("contenedor-canvas")
+               canvas.style("max-width", "500px")
+               canvas.style("width", "100%")
+               canvas.style("max-height", "500px")
+               canvas.style("height", "100%")
+
+               TX = width * 0.1
+               TY = height * 0.5
+
+               nerdamer.setFunction("P", ["x", "u"], "(e^(-u)*u^x)/x!");
+
+               document.getElementById("f-latex").src = `
+               https://latex.codecogs.com/svg.image?\\huge&space;P(x)=` + nerdamer("P(x,\\mu)").toTeX()
+          }
+
+          function mousePressed() {
+               if (mouseInCanvas()) {
+                    focusCanvas = true
+               }
+          }
+          function mouseReleased() {
+               if (!mouseInCanvas()) {
+                    focusCanvas = false
+               }
+          }
+
+          function mouseDragged() {
+               focusCanvas = true
+               if (mouseInCanvas()) {
+                    TX += mouseX - pmouseX
+                    TY += mouseY - pmouseY
+               }
+          }
+
+          function mouseInCanvas() {
+               return mouseX > 0 && mouseY > 0 && mouseX < width && mouseY < height
+          }
+
+          function draw() {
+               background("white")
+               lambda = Number(document.getElementById("lambda").value)
+
+               translate(TX, TY)
+               if (focusCanvas) {
+                    if (keyIsDown(RIGHT_ARROW)) {
+                         TX += 2
+                    }
+                    if (keyIsDown(LEFT_ARROW)) {
+                         TX -= 2
+                    }
+                    if (keyIsDown(UP_ARROW)) {
+                         TY -= 2
+                    }
+                    if (keyIsDown(DOWN_ARROW)) {
+                         TY += 2
+                    }
+               }
+
+               stroke("black")
+               fill("black")
+               line(-TX, 0, -TX + width, 0)
+               line(0, -TY, 0, height - TY)
+
+               let ymin = -ceil((height - TY) / ESCALA_Y)
+               let ymax = -Math.floor(-TY / ESCALA_Y)
+
+               let coef_escala = ESCALA_X < 20 ? ESCALA_X < 10 ? 5 : 2 : 1
+
+               textAlign(RIGHT, CENTER)
+
+               for (let i = ymin; i <= ymax; i += coef_escala) {
+                    let p = TL_point(0, i)
+                    push()
+                    noStroke()
+                    circle(p.x, p.y, 5)
+                    if (i != 0) {
+                         text(
+                              round(-p.y / ESCALA_Y),
+                              TX - 15 <= 0 ? 15 - TX : TX >= width ? width - TX - 15 : p.x - 15,
+                              p.y
+                         )
+                    }
+                    pop()
+                    push()
+                    stroke(0, 0, 0, 30)
+                    if (i != 0) {
+                         line(-TX, p.y, -TX + width, p.y)
+                    }
+                    pop()
+               }
+               xmin = Math.floor(-TX / ESCALA_X)
+               xmax = Math.floor((width - TX) / ESCALA_X)
+               for (let i = xmin; i <= xmax; i += coef_escala) {
+                    let p = TL_point(i, 0)
+                    push()
+                    noStroke()
+                    circle(p.x, p.y, 5)
+                    if (i != 0) {
+                         text(
+                              round(p.x / ESCALA_X),
+                              p.x,
+                              TY <= 0 ? - TY + 15 : TY >= height ? height - TY - 15 : p.y + 15
+                         )
+                    }
+                    pop()
+                    push()
+                    stroke(0, 0, 0, 30)
+                    if (i != 0) {
+                         line(p.x, -TY, p.x, height - TY)
+                    }
+                    pop()
+               }
+               stroke("red")
+               noFill()
+               beginShape()
+               for (let i = xmin; i <= xmax + 1; i += (xmax + 1 - xmin) / 100) {
+                    try {
+                         let v = TL_point(i, Number(nerdamer(`P(${i},${lambda})`).evaluate().text()))
+                         vertex(v.x, v.y)
+                    } catch (error) {
+                    }
+               }
+               endShape()
+          }
+
+          function TL_point(x, y) {
+               let v = createVector(x, y)
+               v.mult(ESCALA_X, -ESCALA_Y)
+               return v
+          }
+     </script>
+
+</body>
+
+</html>

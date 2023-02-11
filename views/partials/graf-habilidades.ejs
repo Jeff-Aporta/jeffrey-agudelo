@@ -1,0 +1,278 @@
+<script src="https://d3js.org/d3.v6.min.js"></script>
+
+<div id="graf-habilidades">
+</div>
+
+<br>
+
+<style>
+    svg {
+      border: solid 1px #ccc;
+    }
+
+    .link {
+      fill: none;
+      stroke: #aaa;
+      stroke-width: 2px;
+    }  
+
+    #graf-habilidades{
+      width: 100%;
+      overflow: hidden;
+    }
+</style>
+
+<script>
+    let width = 1300;
+    let height = width;
+
+    let svg = d3.select('#graf-habilidades')
+        .append('svg')
+        .attr('width', width)
+        .attr('height', height)
+
+    //Redimensionar el gráfico svg cuando se redimensiona la ventana
+    d3.select(window).on('resize', responsiveD3JS);
+
+    setTimeout(responsiveD3JS, 100);
+
+    function responsiveD3JS() {
+        let l = window.innerWidth;
+        console.log(l)
+
+        let w = parseFloat(d3.select("#graf-habilidades").style("width").replace("px", ""))
+
+        d3.select("#graf-habilidades").style("height", w + "px")
+
+        let escala = w / width;
+        svg.style("transform", "scale(" + escala + ")");
+        svg.style("transform-origin", "0 0");
+    }
+
+    let root = {
+      name:"Jeffrey Agudelo",
+      logo:"https://i.ibb.co/2M3sKM9/00003-211110304-wallpaper-elec.png",
+      children:[
+          {
+            name: "Desarrollador",
+            children:[
+                  {
+                    name: "HTML",
+                    logo: "img/svg/logo-html.svg",
+                    children:[
+                      {
+                        name: "CSS",
+                        logo: "img/svg/logo-css.svg",
+                        children:[
+                          {
+                            name: "Bootstrap",
+                            logo: "img/svg/logo-bootstrap.svg",
+                          },
+                          {
+                            name: "Font Awesome",
+                            logo: "img/svg/logo-font-awesome.svg",
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    name: "Javascript",
+                    logo: "img/svg/logo-javascript.svg",
+                    children:[
+                      {
+                        name: "jQuery",
+                        logo: "img/svg/logo-jquery.svg",
+                      },
+                      {
+                        name: "SweetAlert2",
+                        logo: "img/pixmap/logo-swal2.png",
+                      },
+                      {
+                        name:"Gráficos",
+                        logo: "img/pixmap/compugrafica.png",
+                        children:[
+                          {
+                            name: "p5.js",
+                            logo: "img/pixmap/logo-p5-js.png",
+                          },
+                          {
+                            name: "D3.js",
+                            logo: "img/svg/logo-d3-js.svg",
+                          },
+                        ]
+                      },
+                    ]
+                  },
+                  {
+                    name: "Node.js",
+                    logo: "img/svg/logo-nodejs.svg",
+                    children:[
+                      {
+                        name: "Socket.io",
+                        logo: "img/svg/logo-socket-io.svg",
+                      },
+                      {
+                        name: "NodeMailer",
+                        logo: "img/pixmap/logo-nodemailer.png",
+                      },
+                      {
+                        name: "Express",
+                        logo: "img/pixmap/logo-express.png",
+                        children:[
+                          {
+                            name: "EJS",
+                            logo: "img/pixmap/logo-ejs.png",
+                          },
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    name: "Java",
+                    logo: "img/svg/logo-java.svg",
+                    children: [
+                      {
+                        name: "JSP",
+                        logo: "img/pixmap/logo-jsp.png",
+                      },
+                      {
+                        name:"FFmpeg",
+                        logo: "img/svg/logo-ffmpeg.svg",
+                      },
+                      {
+                        name: "FTP",
+                        logo: "img/pixmap/logo-ftp.png",
+                      }
+                    ]
+                  },
+                  {
+                    name: "Python",
+                    logo: "img/svg/logo-python.svg",
+                    children:[
+                    {
+                        name: "Pygame",
+                        logo: "img/pixmap/logo-pygame.webp",
+                      },
+                      {
+                        name: "Flask",
+                        logo: "img/svg/logo-flask.svg",
+                      },
+                      {
+                        name: "pywhatkit",
+                        logo: "img/pixmap/logo-pywhatkit.png",
+                      }
+                    ]
+                  },
+                  {
+                    name: "BD",
+                    children:[
+                      {
+                        name: "MySQL",
+                        logo: "img/svg/logo-mysql.svg",
+                      },
+                      {
+                        name: "MongoDB",
+                        logo: "img/svg/logo-mongodb.svg",
+                      },
+                      {
+                        name: "Google Sheets",
+                        logo: "img/svg/logo-google-sheets.svg",
+                      }
+                    ]
+                  }
+              ]
+          },
+          {
+            name: "Diseño",
+            children: [
+              {
+                name: "Photoshop",
+                logo: "img/svg/logo-photoshop.svg",
+              },
+              {
+                "name": "Camtasia",
+                "logo": "img/svg/logo-camtasia.svg",
+              },
+              {
+                name: "Audacity",
+                logo: "img/svg/logo-audacity.svg",
+              }
+            ]
+          }
+      ]
+  }
+
+  let data = d3.hierarchy(root);
+
+  let diameter = height*0.8;
+  let radius = diameter / 2;
+  let tree = d3.tree()
+      .size([2 * Math.PI, radius])
+      .separation(function(a, b) { 
+          return (a.parent == b.parent ? 1 : 2) / a.depth; 
+      });
+  let treeData = tree(data)
+  let nodes = treeData.descendants();
+  let links = treeData.links();
+  let graphGroup = svg.append('g')
+  .attr('transform', "translate("+(width/2)+","+(height/2)+")");
+  graphGroup.selectAll(".link")
+  .data(links)
+  .join("path")
+  .attr("class", "link")
+  .attr("d", d3.linkRadial()
+      .angle(d => d.x)
+      .radius(d => d.y+40));
+  let node = graphGroup
+    .selectAll(".node")
+    .data(nodes)
+    .join("g")
+    .attr("class", "node")
+    .attr("transform", function (d) {
+      return `rotate(${d.x * 180 / Math.PI - 90})`
+        + `translate(${d.y+40}, 0)`;
+    });
+
+    node.append("circle").attr("r", function(d) { return d.data.logo?30:Math.max(d.data.name.length*4,30); })
+    .attr("fill", function(d) { return d.data.logo ? "white" : `hsl(${Math.random()*360},100%,25%)`; })
+    .attr("stroke", function(d) { return d.data.logo ? "gray" : "white"; })
+    .attr("stroke-width", function(d) { return d.data.logo ? 3:  "none"; });
+
+    let wimg = 40;
+    node.append("foreignObject")
+    .style("opacity", function(d) { return d.data.logo ? 1 : 0; })
+    .attr("width", wimg)
+    .attr("height", wimg)
+    .attr("x", -wimg/2)
+    .attr("y", -wimg/2)
+    .attr("transform", function(d) { 
+        return d.x < Math.PI ? null : "rotate(180)"; 
+    })
+    .html(function(d){ d.data.name; })
+    .append("xhtml:img")
+    .attr("src", function(d) { return d.data.logo; })
+    .attr("width", wimg)
+    .attr("height", wimg)
+    .style("object-fit", "contain")
+    .style("object-position", "center")
+    
+    node.append("text")
+    .attr("font-family", "sans-serif")
+    .attr("fill", function(d) { return d.data.logo ? "black" : "white"; })
+    .attr("font-size", 12)
+    .attr("dy", function(d) { return d.data.logo ? -35: 0; })
+    .attr("text-anchor", "middle")
+    .style("font-weight", "bolder")
+    .style("stroke",function(d) { return d.data.logo ? "white" : "black"; })
+    .style("stroke-weight","3px")
+    .style("stroke-linecap","butt")
+    .style("stroke-linejoin","miter")
+    .style("paint-order","stroke")
+    .attr("transform", function(d) { 
+        return d.x < Math.PI ? null : "rotate(180)"; 
+    })
+    .text(function(d) { return d.data.name; });
+</script>
+
+

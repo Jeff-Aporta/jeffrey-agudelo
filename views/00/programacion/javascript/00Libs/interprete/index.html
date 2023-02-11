@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Matemática computacionada</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="nerdamer.core.js"></script>
+  <script src="Algebra.js"></script>
+  <script src="Calculus.js"></script>
+  <script src="Solve.js"></script>
+  <script src="Extra.js"></script>
+  <script src="nerdamer_español.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Righteous&display=swap');
+
+    :root {
+      --color-lineas: black;
+      --color-fondo-operador: rgba(255, 153, 0, 0.8);
+      --color-fondo-variable-literal: rgba(255, 255, 255, 1);
+    }
+
+    * {
+      transition: all 0.3s;
+    }
+
+    body {
+      padding-top: 10px;
+      margin: 0;
+      text-align: center;
+      min-height: 100vh;
+      font-family: calibri, sans-serif;
+    }
+
+    img {
+      animation: zoomIn;
+      animation-duration: 1s;
+      max-width: 90%;
+    }
+
+    .tree {
+      animation: zoomIn;
+      animation-duration: 1s;
+      filter: drop-shadow(5px 5px 5px rgba(0, 0, 0, 0.5));
+    }
+
+    .tree ul {
+      position: relative;
+      padding: 1em 0;
+      white-space: nowrap;
+      margin: 0 auto;
+    }
+
+    .tree ul::after {
+      content: '';
+      display: table;
+      clear: both;
+    }
+
+    .tree li {
+      display: inline-block;
+      vertical-align: top;
+      text-align: center;
+      list-style-type: none;
+      position: relative;
+      padding: 1em 0.5em 0 0.5em;
+    }
+
+    .tree li::before,
+    .tree li::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 50%;
+      border-top: 3px solid var(--color-lineas);
+      width: 50%;
+      height: 1em;
+    }
+
+    .tree li::after {
+      right: auto;
+      left: 50%;
+      border-left: 3px solid var(--color-lineas);
+    }
+
+    .tree li:only-child::after,
+    .tree li:only-child::before {
+      display: none;
+    }
+
+    .tree li:only-child {
+      padding-top: 0;
+    }
+
+    .tree li:first-child::before,
+    .tree li:last-child::after {
+      border: 0 none;
+    }
+
+    .tree li:last-child::before {
+      border-right: 3px solid var(--color-lineas);
+    }
+
+    .tree li:first-child::after {}
+
+    .tree ul ul::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      border-left: 3px solid var(--color-lineas);
+      width: 0;
+      height: 1em;
+    }
+
+    .tree li div {
+      border: 3px solid var(--color-lineas);
+      padding: 0.5em 0.75em;
+      text-decoration: none;
+      display: inline-block;
+      border-radius: 50%;
+      position: relative;
+      top: 1px;
+    }
+
+    .tree li div:hover,
+    .tree li div:hover+ul li div {
+      background: #90c4f4;
+      color: #fff;
+      border: 3px solid #0058aa;
+    }
+
+    .tree li div:hover+ul li::after,
+    .tree li div:hover+ul li::before,
+    .tree li div:hover+ul::before,
+    .tree li div:hover+ul ul::before {
+      border-color: #0058aa;
+    }
+
+    .tree div span {
+      display: inline-block;
+      min-width: 30px;
+      animation: rotateIn;
+      animation-duration: 1.5s;
+      font-size: 120%;
+    }
+
+    .variable_or_literal {
+      background: var(--color-fondo-variable-literal);
+    }
+
+    .operator {
+      background: var(--color-fondo-operador);
+    }
+
+    .function {
+      background: black;
+      color: #fff !important;
+    }
+
+    #input {
+      border: 2px solid #ababab;
+      border-radius: 3px;
+      padding: 20px;
+      color: #707070;
+      font-size: 120%;
+      width: 50%;
+      margin-bottom: 4px;
+      width: 90%;
+      max-width: 90%;
+      height: 300px;
+    }
+
+    #generate {
+      padding: 0;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      background: #ccc;
+      padding: 10px;
+      vertical-align: top;
+      font-size: 18px;
+      color: black;
+      border-radius: 20px;
+      margin-left: 2px;
+    }
+
+    #outputProced {
+      color: white;
+      text-align: left;
+      padding: 20px;
+    }
+
+    .latex {
+      transform: translateY(5px);
+      filter: invert(1);
+      margin: 10px;
+      vertical-align: middle;
+    }
+
+    .cajon {
+      padding: 10px;
+      margin-left: 20px;
+      border: 1px solid white;
+      border-radius: 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <script>
+    anguloFondo = 0
+    setInterval(() => {
+      anguloFondo += 1
+      document.body.style.background = `linear-gradient(${anguloFondo}deg,#19046F, #93006F)`
+    }, 20)
+  </script>
+  <br />
+  <div style="color: white;font-size: 200%;font-family: 'Righteous', cursive;">
+    Matemática computacionada
+  </div>
+  <br />
+  <div style="color: white;font-size: 80%;">
+    Escribe la expresión matemática, luego presiona generar
+  </div>
+  <br />
+  <textarea name="textarea" id="input"></textarea>
+  <br />
+  <div style="color: white;">
+    <input type="radio" name="tiponumero" id="fraccion" checked onchange="generate()" />
+    <label for="fraccion">fracciones</label>
+    <input type="radio" name="tiponumero" id="decimal" onchange="generate()" />
+    <label for="decimal">decimales</label>
+    <br />
+    <input id="dpi" type="number" value="150" min="90" max="999" step="1" onchange="generate()" />
+  </div>
+  <br />
+  <button id="generate" onclick="generate()">Generar</button>
+  <br />
+  <br />
+  <div id="output" style="text-align: left;padding: 10px;border: solid 2px white;margin:10px;"></div>
+  <br />
+  <div id="outputAB"></div>
+  <br />
+  <div id="outputProced"></div>
+  <script>
+    var core = nerdamer.getCore()
+    var PARSER = core.PARSER
+
+    var input = document.getElementById('input')
+    var output = document.getElementById('output')
+    var outputAB = document.getElementById('outputAB')
+    var outputProced = document.getElementById('outputProced')
+
+    let ocultar = false;
+    let textoHTML = '';
+
+    input.innerHTML = localStorage.getItem('programa') || ''
+    if (localStorage.getItem('programa')) {
+      generate()
+    }
+
+    nerdamer.procedimiento = outputProced
+    nerdamer.escribirProced = function (texto, tabulación) {
+      if (nerdamer.procedimiento) {
+        let txt = ''
+        for (let i = 0; i < tabulación; i++) {
+          txt += '&nbsp;&nbsp;&nbsp;&nbsp;'
+          txt += '&nbsp;&nbsp;&nbsp;&nbsp;'
+          txt += '&nbsp;&nbsp;&nbsp;&nbsp;'
+          txt += '&nbsp;&nbsp;&nbsp;&nbsp;'
+        }
+        txt += texto + '<br/>'
+        if (nerdamer.txtProcedimiento) {
+          nerdamer.txtProcedimiento += txt
+        } else {
+          nerdamer.txtProcedimiento = txt
+        }
+      }
+    }
+
+    function obtenerLaTeXHTML(LaTeX, dpi = 130, and = false) {
+      let latex = quitarAcentosLaTeX(LaTeX)
+      latex = latex.replaceAll("/", "\\slash ")
+      if (and) {
+        latex = latex.replaceAll("&", "\\&")
+      }
+      return (
+        `<img class="latex" src='` +
+        `https://latex.codecogs.com/png.latex?` +
+        `\\dpi{${dpi}}` +
+        escape(quitarAcentosLaTeX(latex)) +
+        `'>`
+      )
+    }
+
+    function secuencia(valor, tipo) {
+      this.valor = valor
+      this.tipo = tipo
+    }
+
+    function ponerHTML() {
+      output.innerHTML = textoHTML
+      textoHTML = ''
+    }
+
+    function construirHTML(html) {
+      if (ocultar) {
+        return
+      }
+      textoHTML += html
+    }
+
+    function extraerRenglones(texto) {
+      let charArr = [...texto]
+      let _sentencia = ""
+      let sentencias = []
+      enParentesis = 0
+      es$ = false
+      admitirEnter = false
+      //Filtro No 1, extraer renglones
+      for (const car of charArr) {
+        if (car == "(") {
+          enParentesis++
+          if (es$ && enParentesis) {
+            admitirEnter = true
+          }
+        }
+        if (car == ")") {
+          enParentesis--
+        }
+        if (car == "$") {
+          es$ = true
+        }
+        if (car == "\n" && enParentesis == 0) {
+          sentencias.push(_sentencia)
+          _sentencia = ""
+          if (es$) {
+            es$ = false
+            admitirEnter = false
+          }
+        }
+        if (car != "\n") {
+          _sentencia += car
+        } else if (es$) {
+          _sentencia += car
+        }
+      }
+      sentencias.push(_sentencia)
+      if (enParentesis) {
+        console.error("error de parentesis")
+      }
+      return sentencias
+    }
+
+    function quitarAcentosLaTeX(cadena) {
+      const acentos = {
+        á: '\\acute{a}',
+        é: '\\acute{e}',
+        í: '\\acute{i}',
+        ó: '\\acute{o}',
+        ú: '\\acute{u}',
+        Á: '\\acute{A}',
+        É: '\\acute{E}',
+        Í: '\\acute{I}',
+        Ó: '\\acute{O}',
+        Ú: '\\acute{U}'
+      }
+      return cadena
+        .split('')
+        .map(letra => acentos[letra] || letra)
+        .join('')
+        .toString()
+    }
+
+    function generate() {
+      nerdamer.flush()
+      nerdamer.clearVars()
+      nerdamer.txtProcedimiento = ''
+      //console.clear()
+      let texto = input.value
+      localStorage.setItem('programa', texto)
+      while (texto.includes('|')) {
+        texto = texto.replace('|', 'abs(').replace('|', ')')
+      }
+      let expresiones = []
+      let dpi = document.getElementById('dpi').value
+
+      let sentenciasFiltro1_documento = extraerRenglones(texto)
+
+      console.log(sentenciasFiltro1_documento)
+      //Filtro No 2, Secuencias interrumpidas
+      let renglones_documento = []
+      let esComentario = false
+      for (let renglon of sentenciasFiltro1_documento) {
+        let esPar = renglon.startsWith("$") ? 0 : 1
+        renglon = renglon.replaceAll("\\$", "%dollar protect%")
+        let subsentencias = renglon.split("$")
+        let i = 0
+        let ur
+        let tipo = "eq"
+        for (let r of subsentencias) {
+          tipo = "eq"
+          ur = r
+          if (r == "") {
+            continue
+          }
+          if (r.startsWith("/*")) {
+            esComentario = true
+          }
+          if (esComentario) {
+            tipo = "text"
+          } else {
+            if (i++ % 2 == esPar) {
+              tipo = "text"
+            }
+            if (r.startsWith("code(")) {
+              tipo = "text-code"
+            }
+          }
+          renglones_documento.push(
+            new secuencia(r.replaceAll("%dollar protect%", "\\$"),
+              tipo + (esComentario ? "-coment" : "")
+            )
+          )
+          if (r.endsWith("*/")) {
+            esComentario = false
+          }
+        }
+        console.log(renglones_documento)
+        if (!esComentario && tipo != "text-code" && !ur.endsWith("*/")) {
+          renglones_documento.push(
+            new secuencia("\n", "text")
+          )
+        }
+      }
+      for (let renglon of renglones_documento) {
+        if (renglon.tipo == "text-coment") {
+          continue
+        }
+        if (renglon.valor.startsWith('code(')) {
+          let cuerpo = renglon.valor.replace("code(", "")
+          cuerpo = cuerpo.substring(0, cuerpo.length - 1)
+          let renglonesCode = extraerRenglones(cuerpo)
+          for (const r of renglonesCode) {
+            if (r.trim() == "hr") {
+              construirHTML("<hr>")
+              continue
+            }
+            if (r.trim() == "ocultar") {
+              ocultar = true
+              continue
+            }
+            if (r.trim() == "mostrar") {
+              ocultar = false
+              continue
+            }
+            construirHTML(r)
+          }
+          continue
+        }
+        if (renglon.tipo == "text") {
+          if (renglon.valor == "\n") {
+            construirHTML(`<br>`)
+            continue
+          }
+          let latex = renglon.valor
+          let saltos = latex.includes("\n")
+          if (latex.startsWith("(") && latex.endsWith(")")) {
+            latex = latex.substring(1, latex.length - 1)
+          }
+          if (saltos) {
+            latex = "\\\\" + latex
+          }
+          if (latex.length > 45) {
+            let renglones = latex.split("\n")
+            for (const r of renglones) {
+              let palabras = r.split(" ")
+              for (const p of palabras) {
+                if (p == "") {
+                  continue
+                }
+                construirHTML(
+                  obtenerLaTeXHTML(p, dpi, true)
+                )
+              }
+              construirHTML("<br>")
+            }
+          } else {
+            construirHTML(
+              obtenerLaTeXHTML(
+                latex
+                  .replaceAll("\n", "\\\\")
+                  .replaceAll(" ", "\\text{ }")
+              )
+            )
+          }
+          continue
+        }
+        let e = nerdamer(renglon.valor)
+        if (e.symbol instanceof Array) {
+          txt = 'matrix('
+          for (const obj of e.symbol) {
+            if (obj.length == 2) {
+              let n = 0
+              if (document.getElementById('decimal').checked) {
+                try {
+                  n = Number(
+                    nerdamer(obj[1])
+                      .evaluate()
+                      .text('decimal')
+                  )
+                } catch (error) {
+                  n = nerdamer(obj[1])
+                    .evaluate()
+                    .text('decimal')
+                }
+              } else {
+                n = obj[1]
+              }
+              txt += '[' + obj[0] + ',' + n + '],'
+            } else {
+              txt += '[' + obj + '],'
+            }
+          }
+          txt += ')'
+          txt = txt.replace(',)', ')')
+          e = nerdamer(txt)
+        }
+        expresiones.push(e)
+        let pref = ''
+        if (renglon.valor.includes(':')) {
+          if (renglon.valor.split(':')[0].includes('matget')) {
+            pref += nerdamer(renglon.valor.split(':')[0]) + '\\leftarrow '
+          } else {
+            pref += renglon.valor.split(':')[0] + '\\leftarrow '
+          }
+        }
+        try {
+          construirHTML(
+            obtenerLaTeXHTML(
+              pref +
+              e.toTeX(
+                document.getElementById('decimal').checked
+                  ? 'decimal'
+                  : 'fractions'
+              ),
+              dpi
+            )
+          )
+        } catch (ex) {
+          construirHTML(
+            obtenerLaTeXHTML(
+              pref +
+              nerdamer(e).toTeX(
+                document.getElementById('decimal').checked
+                  ? 'decimal'
+                  : 'fractions'
+              ),
+              dpi
+            )
+          )
+        }
+      }
+      ponerHTML()
+
+      outputAB.innerHTML = ''
+      for (const arboles of expresiones) {
+        try {
+          outputAB.innerHTML +=
+            "<div style='color:white;font-size:120%'>" +
+            (arboles.symbol instanceof Array
+              ? JSON.stringify(arboles.symbol)
+              : arboles.text()) +
+            '</div>'
+          outputAB.innerHTML += nerdamer.htmlTree(arboles.text('fractions'))
+        } catch (e) { }
+      }
+      //nerdamer.procedimiento.innerHTML = nerdamer.txtProcedimiento
+    }
+  </script>
+</body>
+
+</html>

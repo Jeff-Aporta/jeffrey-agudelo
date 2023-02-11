@@ -1,0 +1,56 @@
+<style>
+    .boton-menu:hover {
+        backdrop-filter: brightness(0.95);
+        cursor: pointer;
+    }
+
+    .boton-menu{
+        padding: 10px;
+    }
+
+    .boton-menu:not(:last-child){
+        border-right: 1px solid lightgray;
+    }
+</style>
+
+<div
+style="
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: white;
+    color: black;
+    font-weight: bolder;
+    box-shadow: 0 5px 3px 0 rgba(0, 0, 0, 0.1);
+"
+>
+    <div
+        class="boton-menu"
+    >
+        <a href="/" style="text-decoration: none; color: inherit">
+        Acerca de mi
+        </a>
+    </div>
+    <div
+        class="boton-menu"
+    >
+        <a href="/00/programacion/" style="text-decoration: none; color: inherit">
+        Programación
+        </a>
+    </div>
+    <div
+        class="boton-menu"
+    >
+        <a href="/dibujos-y-pinturas" style="text-decoration: none; color: inherit">
+        Dibujos y Pinturas
+        </a>
+    </div>
+    <div class="boton-menu">
+        <a href="/libros-y-textos" style="text-decoration: none; color: inherit">
+        Libros y textos
+        </a>
+    </div>
+</div>
