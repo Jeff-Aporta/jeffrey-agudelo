@@ -1,6 +1,6 @@
-console.log("JSONGS cargado! a3")
+console.log("JSONGS cargado! a3");
 
-(()=>{
+(() => {
     let regex = /JSONGS--X--.*--Y--.*/g
     document.querySelectorAll("*").forEach((element) => {
         let clases = element.classList;
@@ -11,6 +11,7 @@ console.log("JSONGS cargado! a3")
             let XY = localStorage.getItem(clase)
             if (XY) {
                 element.innerHTML = XY
+                console.log("Local storage actualizado:", clase, "=", XY)
             }
         })
     })
@@ -60,7 +61,7 @@ function JSONGS_sustituirValoresSegunClase(hoja_gs) {
                 console.log(XY)
                 if (XY) {
                     element.innerHTML = XY
-                    localStorage.setItem(clase,XY)
+                    localStorage.setItem(clase, XY)
                 }
             }
         })
