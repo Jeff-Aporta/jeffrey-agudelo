@@ -1,6 +1,8 @@
-console.log("JSONGS cargado! a4");
+console.log("JSONGS cargado! a5");
 
-(() => {
+setTimeout(JSONGS_usarLocalStorage, 100);
+
+function JSONGS_usarLocalStorage() {
     let regex = /JSONGS--X--.*--Y--.*/g
     document.querySelectorAll("*").forEach((element) => {
         let clases = element.classList;
@@ -16,7 +18,7 @@ console.log("JSONGS cargado! a4");
             }
         })
     })
-})();
+}
 
 async function JSONGS_cargar(url, nombreLocalStorage, callback) {
     let texto
