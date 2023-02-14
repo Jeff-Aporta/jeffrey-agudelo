@@ -22,13 +22,13 @@ async function cargarJSONGS(url, nombreLocalStorage, callback) {
     }, {}))
 
     if (callback) {
-        await callback();
+        await callback(hoja_gs);
     }
 
     return hoja_gs;
 }
 
-function adjuntarLibreriasEnHeader(regla) {
+function adjuntarLibreriasEnHeader(hoja_gs, regla) {
     if (!regla) {
         console.log("No hay regla en adjuntar librerias en header");
         return
