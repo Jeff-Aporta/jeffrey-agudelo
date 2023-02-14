@@ -1,6 +1,6 @@
 console.log("JSONGS cargado! a5");
 
-setTimeout(JSONGS_usarLocalStorage, 100);
+setTimeout(JSONGS_usarLocalStorage, 0);
 
 function JSONGS_usarLocalStorage() {
     let regex = /JSONGS--X--.*--Y--.*/g
