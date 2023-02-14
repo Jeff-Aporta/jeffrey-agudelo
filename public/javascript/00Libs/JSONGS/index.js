@@ -1,5 +1,6 @@
-console.log("JSONGS cargado! a6");
+console.log("JSONGS cargado! a7");
 
+document.addEventListener("load",JSONGS_usarLocalStorage)
 setTimeout(JSONGS_usarLocalStorage, 0);
 
 function JSONGS_usarLocalStorage() {
