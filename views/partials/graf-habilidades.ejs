@@ -1,538 +1,228 @@
 <script src="https://d3js.org/d3.v6.min.js"></script>
+<script src="/javascript/00Libs/JSONGS/index.js"></script>
 
-<div class="btn btn-primary">
-  Descargar mapa
-</div>
-<br>
-<br>
 <div id="graf-habilidades">
 </div>
 
 <br>
 
 <style>
-    svg {
-      border: solid 1px #ccc;
+  svg {
+    border: solid 1px #ccc;
+  }
+
+  .link {
+    fill: none;
+    stroke: #aaa;
+    stroke-width: 2px;
+  }
+
+  #graf-habilidades {
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .mouseover {
+    cursor: pointer;
+    transform: scale(1);
+    transition: all 0.25s;
+  }
+
+  .mouseover:hover {
+    transform: scale(1.5);
+  }
+
+  .mouseover2:hover img {
+    border-radius: 0;
+  }
+
+  .mouseover:hover .mouseover2 {
+    background: rgba(255, 255, 255, 0.6) !important;
+  }
+
+  .mouseover .mouseover2 img {
+    animation: animacion 0.5s infinite alternate;
+  }
+
+  .mouseover .mouseover2 {
+    animation: animacion2 0.5s infinite alternate;
+  }
+
+  .mouseover2 img {
+    border: 2px solid gray;
+  }
+
+  @keyframes animacion2 {
+    0% {
+      color: black;
     }
 
-    .link {
-      fill: none;
-      stroke: #aaa;
-      stroke-width: 2px;
-    }  
+    100% {
+      color: darkblue;
+    }
+  }
 
-    #graf-habilidades{
-      width: 100%;
-      overflow: hidden;
+  @keyframes animacion {
+    0% {
+      border: 5px solid black;
     }
 
-    .mouseover{
-      cursor: pointer;
-      transform: scale(1);
-      transition: all 0.25s;
+    100% {
+      border: 5px solid gray;
     }
-
-    .mouseover:hover{
-      transform: scale(1.5);
-    }
-
-    .mouseover2:hover img{
-      border-radius: 0;
-    }
-
-    .mouseover:hover .mouseover2{
-      background: rgba(255, 255, 255, 0.6) !important;
-    }
-
-    .mouseover .mouseover2 img{
-      animation: animacion 0.5s infinite alternate;
-    }
-
-    .mouseover .mouseover2{
-      animation: animacion2 0.5s infinite alternate;
-    }
-    
-    .mouseover2 img{
-      border: 2px solid gray;
-    }
-
-    @keyframes animacion2{
-      0%{
-        font-weight: bolder;
-      }
-      100%{
-        font-weight: normal;
-      }
-    }
-
-    @keyframes animacion{
-      0%{
-        border: 5px solid black;
-      }
-      100%{
-        border: 2px solid gray;
-      }
-    }
-
+  }
 </style>
 
 <script>
-    let width = 1500;
-    let height = width;
+  let width = 1500;
+  let height = width;
 
-    d3.selection.prototype.moveToFront = function() {
-      return this.each(function(){
-        this.parentNode.appendChild(this);
-      });
-    };
+  d3.selection.prototype.moveToFront = function () {
+    return this.each(function () {
+      this.parentNode.appendChild(this);
+    });
+  };
 
-    let svg = d3.select('#graf-habilidades')
-        .append('svg')
-        .attr('width', width)
-        .attr('height', height)
+  let svg = d3.select('#graf-habilidades')
+    .append('svg')
+    .attr('width', width)
+    .attr('height', height)
 
-    svg.on("load",  responsiveD3JS)
+  svg.on("load", responsiveD3JS)
 
-    svg.attr("id",'svg-graf-habilidades')
+  svg.attr("id", 'svg-graf-habilidades')
 
-    //Redimensionar el gráfico svg cuando se redimensiona la ventana
-    d3.select(window).on('resize', responsiveD3JS);
+  //Redimensionar el gráfico svg cuando se redimensiona la ventana
+  d3.select(window).on('resize', responsiveD3JS);
 
-    function responsiveD3JS() {
-        let w = parseFloat(d3.select("#graf-habilidades").style("width").replace("px", ""))
-        d3.select("#graf-habilidades").style("height", w + "px")
+  function responsiveD3JS() {
+    let w = parseFloat(d3.select("#graf-habilidades").style("width").replace("px", ""))
+    d3.select("#graf-habilidades").style("height", w + "px")
 
-        let escala = w / width;
-        svg.style("transform", "scale(" + escala + ")");
-        svg.style("transform-origin", "0 0");
-    }
-
-    let root = {
-      name:"Jeffrey Agudelo",
-      logo:"https://i.ibb.co/2M3sKM9/00003-211110304-wallpaper-elec.png",
-      children:[
-          {
-            name: "Desarrollador",
-            children:[
-                  {
-                    name:"Computación Gráfica",
-                    logo: "img/gif/mario-super.gif",
-                    swal2:{
-                      width: "90vw",
-                      html:`<center>
-                              <img src="img/gif/mario-super.gif" style="max-width: 200px;max-height: 200px;">
-                            </center>
-                            <br>
-                            <h1>
-                              Computación gráfica
-                            </h1>
-                            <br>
-                            <div style="text-align: left;">
-                              <small>
-                                Tengo experiencia en el desarrollo de soluciones y aplicaciones de gráficos 2D. He trabajado con diversas tecnologías y herramientas, incluyendo lenguajes de programación como Java, Python, HTML5 Canvas y librerías de gráficos 2D como p5.js o d3.js. He desarrollado proyectos que incluyen la creación de juegos, visualizaciones de datos, animaciones y aplicaciones de diseño gráfico. Mi enfoque en la optimización de rendimiento y la calidad visual ha sido un factor clave en mis proyectos y estoy seguro de poder aportar mis habilidades en gráficos 2D a cualquier equipo de desarrollo.
-                                <br> <br>
-                                <ul>
-                                  <li>
-                                    <strong>
-                                      Colisiones:
-                                    </strong>
-                                    incluye la detección y respuesta a las colisiones entre objetos en un juego o aplicación gráfica.
-                                  </li>
-                                  <li>
-                                    <strong>
-                                      Manejo de Sprites: 
-                                    </strong>
-                                    incluye la creación, manipulación y animación de gráficos compuestos utilizados en juegos y aplicaciones gráficas.
-                                  </li>
-                                  <li>
-                                    <strong>
-                                      Transformaciones lineales: 
-                                    </strong>
-                                    incluye la comprensión y aplicación de transformaciones matemáticas como rotación, escala y traslación en gráficos 2D.
-                                  </li>
-                                  <li>
-                                    <strong>
-                                      Transformaciones no lineales: 
-                                    </strong>
-                                    incluye la comprensión y aplicación de transformaciones matemáticas no lineales en gráficos 2D para crear efectos y animaciones más complejos.
-                                  </li>
-                                  <li>
-                                    <strong>
-                                      Iluminación y sombras: 
-                                    </strong>
-                                    incluye la comprensión y aplicación de técnicas de iluminación y sombras para mejorar la apariencia y realismo de gráficos 2D.
-                                  </li>
-                                  <li>
-                                    <strong>
-                                      Texturización: 
-                                    </strong>
-                                    incluye la aplicación de texturas y patrones a gráficos 2D para mejorar su apariencia y realismo.
-                                  </li>
-                                  <li>
-                                    <strong>
-                                      Partículas y efectos especiales: 
-                                    </strong>
-                                    incluye la creación y manipulación de sistemas de partículas y efectos especiales para mejorar la apariencia de juegos y aplicaciones gráficas.
-                                  </li>
-                                  <li>
-                                    <strong>
-                                      Interpolación: 
-                                    </strong>
-                                    incluye la comprensión y aplicación de técnicas de interpolación para suavizar y mejorar la apariencia de animaciones y efectos visuales.
-                                  </li>
-                                  <li>
-                                    <strong>
-                                      Técnicas de antialiasing: 
-                                    </strong>
-                                    incluye la comprensión y aplicación de técnicas de antialiasing para mejorar la apariencia de bordes y texturas en gráficos 2D.
-                                  </li>
-                                  <li>
-                                    <strong>
-                                      Algoritmos de optimización: 
-                                    </strong>
-                                    incluye la comprensión y aplicación de algoritmos de optimización para mejorar el rendimiento de aplicaciones y juegos gráficos 2D.
-                                  </li>
-                                </ul>
-                              </small>
-                            </div>
-                            <br>
-                            <a href="https://es.wikipedia.org/wiki/Computaci%C3%B3n_gr%C3%A1fica_2D" target="_blank">
-                              <h3>Más info del tema Wikipedia</h3>
-                            </a>
-                          `,
-                    },
-                    children: [
-                      {
-                        name: "Efectos algoritmicos",
-                        children:[
-                          {
-                            name: "Sprite sheets",
-                            logo: "img/pixmap/sprite.png"
-                          }
-                        ]
-                      },
-                      {
-                        name:"Modelado matemático",
-                        children:[
-                          {
-                            name: "Colisiones",
-                            children:[
-                              {
-                                name: "rect-n-circle",
-                                logo: "img/gif/rect-n-circle.gif",
-                              },
-                              {
-                                name: "Polygons",
-                                logo: "img/pixmap/logo-polygon.png",
-                              },
-                              {
-                                name: "polylines",
-                                logo: "img/pixmap/logo-polyline-intersect.png",
-                              }
-                            ]
-                          }
-                        ]
-                      }
-                    ]
-                  },
-                  {
-                    name: "Javascript",
-                    logo: "img/svg/logo-javascript.svg",
-                    children:[
-                      {
-                        name: "jQuery",
-                        logo: "img/svg/logo-jquery.svg",
-                        swal2: {
-                          width: "90vw",
-                          html:`
-                            <center>
-                              <img src="img/svg/logo-jquery.svg" style="width: 200px;">
-                            </center>
-                            <br>
-                            <small>
-                              Tengo un conocimiento básico en el uso de JQuery para el desarrollo de aplicaciones web interactivas. He trabajado en la creación de componentes como un DatePicker utilizando la biblioteca y tengo conocimiento en la manipulación básica de elementos HTML a través de selectores y métodos. Estoy comprometido a seguir aprendiendo y mejorando mis habilidades en JQuery para poder aportar valor a cualquier equipo de desarrollo.
-                            </small>
-                            <br> <br>
-                            <a href="https://jquery.com/" target="_blank">
-                              <h4>Visitar sitio web</h4>
-                            </a>
-                          `,
-                        }
-                      },
-                      {
-                        name: "SweetAlert2",
-                        logo: "img/pixmap/logo-swal2.png",
-                        swal2:{
-                          width: "90vw",
-                          html:`
-                            <center>
-                              <img src="img/pixmap/logo-swal2.png" style="width: 200px;">
-                            </center>
-                            <br>
-                            <small>
-                              Tengo experiencia en el uso de la librería SweetAlert para la creación de alertas y diálogos personalizados en aplicaciones web. He trabajado en la implementación de diferentes tipos de alertas, desde simples mensajes hasta formularios y confirmaciones, utilizando las funcionalidades proporcionadas por la librería. Además, he utilizado SweetAlert en combinación con otras tecnologías y librerías, demostrando habilidades en la integración y resolución de problemas. Estoy seguro de que mi experiencia en SweetAlert será un valioso aporte a cualquier equipo de desarrollo.
-                            </small>
-                            <br> <br>
-                            <a href="https://sweetalert2.github.io/" target="_blank">
-                              <h4>Visitar sitio web</h4>
-                            </a>
-                          `,
-                        }
-                      },
-                      {
-                        name:"Gráficos",
-                        logo: "img/pixmap/compugrafica.png",
-                        children:[
-                          {
-                            name: "p5.js",
-                            logo: "img/pixmap/logo-p5-js.png",
-                            children: [
-                              {
-                                name: "mp4 generador",
-                                logo: "img/svg/logo-mp4.svg",
-                              },
-                              {
-                                name: "transformer",
-                                logo: "img/pixmap/logo-transformer.jpg",
-                              }
-                            ]
-                          },
-                          {
-                            name: "D3.js",
-                            logo: "img/svg/logo-d3-js.svg",
-                          },
-                        ]
-                      },
-                    ]
-                  },
-                  {
-                    name: "Node.js",
-                    logo: "img/svg/logo-nodejs.svg",
-                    children:[
-                      {
-                        name: "Socket.io",
-                        logo: "img/svg/logo-socket-io.svg",
-                      },
-                      {
-                        name: "NodeMailer",
-                        logo: "img/pixmap/logo-nodemailer.png",
-                      },
-                      {
-                        name: "imgbb-uploader",
-                        logo: "img/pixmap/logo-imgbb.png",
-                      },
-                      {
-                        name: "Express",
-                        logo: "img/pixmap/logo-express.png",
-                        children:[
-                          {
-                            name: "EJS",
-                            logo: "img/pixmap/logo-ejs.png",
-                          },
-                        ]
-                      }
-                    ]
-                  },
-                  {
-                    name: "LaTeX",
-                    logo: "img/svg/logo-latex.svg",
-                    children:[
-                      {
-                        name: "CodeCogs",
-                        logo: "img/pixmap/logo-codecogs.png",
-                      }
-                    ]
-                  },
-                  {
-                    name: "HTML",
-                    logo: "img/svg/logo-html.svg",
-                    children:[
-                      {
-                        name: "CSS",
-                        logo: "img/svg/logo-css.svg",
-                        children:[
-                          {
-                            name: "Bootstrap",
-                            logo: "img/svg/logo-bootstrap.svg",
-                          },
-                          {
-                            name: "Font Awesome",
-                            logo: "img/svg/logo-font-awesome.svg",
-                          }
-                        ]
-                      }
-                    ]
-                  },
-                  {
-                    name: "Java",
-                    logo: "img/svg/logo-java.svg",
-                    children: [
-                      {
-                        name: "JSP",
-                        logo: "img/pixmap/logo-jsp.png",
-                      },
-                      {
-                        name:"FFmpeg",
-                        logo: "img/svg/logo-ffmpeg.svg",
-                      },
-                      {
-                        name: "FTP",
-                        logo: "img/pixmap/logo-ftp.png",
-                      }
-                    ]
-                  },
-                  {
-                    name: "Python",
-                    logo: "img/svg/logo-python.svg",
-                    children:[
-                    {
-                        name: "Pygame",
-                        logo: "img/pixmap/logo-pygame.webp",
-                      },
-                      {
-                        name: "Flask",
-                        logo: "img/svg/logo-flask.svg",
-                      },
-                      {
-                        name: "pywhatkit",
-                        logo: "img/pixmap/logo-pywhatkit.png",
-                      }
-                    ]
-                  },
-                  {
-                    name: "BD",
-                    children:[
-                      {
-                        name: "MySQL",
-                        logo: "img/svg/logo-mysql.svg",
-                      },
-                      {
-                        name: "MongoDB",
-                        logo: "img/svg/logo-mongodb.svg",
-                      },
-                      {
-                        name: "Google Sheets",
-                        logo: "img/svg/logo-google-sheets.svg",
-                      }
-                    ]
-                  }
-              ]
-          },
-          {
-            name: "Diseño",
-            children: [
-              {
-                name: "Photoshop",
-                logo: "img/svg/logo-photoshop.svg",
-              },
-              {
-                "name": "Camtasia",
-                "logo": "img/svg/logo-camtasia.svg",
-              },
-              {
-                name: "Audacity",
-                logo: "img/svg/logo-audacity.svg",
-              }
-            ]
-          }
-      ]
+    let escala = w / width;
+    svg.style("transform", "scale(" + escala + ")");
+    svg.style("transform-origin", "0 0");
   }
 
-  let data = d3.hierarchy(root);
+  let root
 
-  let diameter = height*0.85;
-  let radius = diameter / 2;
+  (async function () {
+    let url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRgAKWOvIQ05rKJc2aWjxqNxgpD3sSILX4gloIq4QeX7o4mFJE8E5R8KRLZ3CiutgHOyHiVszjoiwQO/pub?output=tsv"
+    JSONGS_cargar(url, (hoja_gs) => {
+      let raiz = hoja_gs.find(elemento => !elemento.parent)
+      encontrarDescendencia(raiz)
+      function encontrarDescendencia(node) {
+        if (!node) {
+          return
+        }
+        node.children = hoja_gs.filter(test => test.parent == node.id)
+        node.children.forEach(child => {
+          encontrarDescendencia(child)
+        })
+      }
+      root = raiz
 
-  let sz = 60
-  let txy = -30
 
-  let tree = d3.tree()
-      .size([2 * Math.PI, radius])
-      .separation(function(a, b) { 
-          return (a.parent == b.parent ? 1 : 2) / a.depth; 
+      let data = d3.hierarchy(root);
+
+      let diameter = height * 0.85;
+      let radius = diameter / 2;
+
+      let sz = 60
+      let txy = -30
+
+      let tree = d3.tree()
+        .size([2 * Math.PI, radius])
+        .separation(function (a, b) {
+          return (a.parent == b.parent ? 1 : 2) / a.depth;
+        });
+      let treeData = tree(data)
+      let nodes = treeData.descendants();
+      let links = treeData.links();
+      let graphGroup = svg.append('g')
+        .attr('transform', "translate(" + (width / 2) + "," + (height / 2) + ")");
+      graphGroup.selectAll(".link")
+        .data(links)
+        .join("path")
+        .attr("class", "link")
+        .attr("d", d3.linkRadial()
+          .angle(d => d.x)
+          .radius(d => d.y+40));
+      let node = graphGroup
+        .selectAll(".node")
+        .data(nodes)
+        .join("g")
+        .attr("class", "node")
+        .attr("transform", function (d) {
+          let a = d.x;
+          return `translate(${txy}, ${txy})`
+            + `rotate(${a * 180 / Math.PI - 90})`
+            + `translate(${d.y+40}, 0)`
+            +`rotate(${90 - a * 180 / Math.PI})`
+        });
+
+      node.on("mouseover", function () {
+        var sel = d3.select(this);
+        sel.moveToFront();
       });
-  let treeData = tree(data)
-  let nodes = treeData.descendants();
-  let links = treeData.links();
-  let graphGroup = svg.append('g')
-  .attr('transform', "translate("+(width/2)+","+(height/2)+")");
-  graphGroup.selectAll(".link")
-  .data(links)
-  .join("path")
-  .attr("class", "link")
-  .attr("d", d3.linkRadial()
-      .angle(d => d.x)
-      .radius(d => d.y+50));
-  let node = graphGroup
-    .selectAll(".node")
-    .data(nodes)
-    .join("g")
-    .attr("class", "node")
-    .attr("transform", function (d) {
-      let a = d.x;
-      return `translate(${txy}, ${txy})`
-        + `rotate(${a * 180 / Math.PI - 90})`
-        + `translate(${d.y+50}, 0)`
-        + `rotate(${90 - a * 180 / Math.PI})`
-    });
 
-  node.on("mouseover",function(){
-    var sel = d3.select(this);
-    sel.moveToFront();
-  });
+      let g = node.append('g').attr("class", function (d) { return d.data.swal2 ? "mouseover" : ""; })
 
-  let g = node.append('g').attr("class", function(d) { return d.data.swal2 ? "mouseover":""; })
-
-  g.on("click", function(e,d) {
-    console.log(d);
-    if(d.data.swal2){
-      swal.fire(d.data.swal2);
-    }
-  })
+      g.on("click", function (e, d) {
+        if (d.data.swal2) {
+          d.data.swal2 = Function("return " + d.data.swal2)()
+          swal.fire(d.data.swal2);
+        }
+      })
 
 
-  let capa = g.append("foreignObject")
-    .attr("width", 2*sz)
-    .attr("height", 2*sz)
-    .style("transform", "translate("+txy+"px,"+txy+"px) ")
-    .style("overflow", "visible")
-    .style("position", "relative")
-    .attr("transform",function(d) {
-      return (d.x < Math.PI || d.depth > 0 ? "" : "rotate(180)")
+      let capa = g.append("foreignObject")
+        .attr("width", 2 * sz)
+        .attr("height", 2 * sz)
+        .style("transform", "translate(" + txy + "px," + txy + "px) ")
+        .style("overflow", "visible")
+        .style("position", "relative")
+        .attr("transform", function (d) {
+          return (d.x < Math.PI || d.depth > 0 ? "" : "rotate(180)")
+        })
+
+      let html = capa.html(function (d) { d.data.name; })
+
+      html.append("xhtml:div")
+        .attr("class", function (d) { return "texto-siempre-arriba " + (d.data.logo ? "mouseover2" : ""); })
+        .style("text-shadow", (d) => {
+          let color = d.data.logo ? "white" : "black";
+          return `0 2px 0 ${color}, 2px 0 0 ${color}, 0 -2px 0 ${color}, -2px 0 0 ${color}`
+        })
+        .style("text-align", "center")
+        .style("font-weight", "bolder")
+        .style("font-size", "90%")
+        .style("position", "absolute")
+        .style("min-width", "100%")
+        .style("padding", "10px")
+        .style("top", (d) => (d.data.logo ? "0" : "50%"))
+        .style("transform", (d) => {
+          return  d.data.logo ? "translateY(-100%) " : "translateY(-80%) "
+        })
+        .style("color", (d) => (d.data.logo ? "black" : "white"))
+        .style("background", function (d) { return d.data.logo ? "" : `hsl(${Math.random() * 360},100%,25%)`; })
+        .style("border-radius", function (d) { return d.data.logo ? "" : "20px"; })
+        .html(function (d) { return d.data.id; })
+
+      html.append("xhtml:div")
+        .attr("class", "mouseover2")
+        .append("xhtml:img")
+        .attr("src", function (d) { return d.data.logo; })
+        .style("background", "white")
+        .style("display", function (d) { return d.data.logo ? "block" : "none"; })
+        .attr("width", 1.3 * sz)
+        .attr("height", 1.3 * sz)
+        .style("margin", "auto")
+        .style("object-fit", "contain")
+        .style("object-position", "center")
+        .style("border-radius", "50%")
+
+
     })
-    
-  let html = capa.html(function(d){ d.data.name; })
-  
-  html.append("xhtml:div")
-  .attr("class", function(d) { return "texto-siempre-arriba " + (d.data.logo ? "mouseover2":""); })
-  .style("text-shadow", (d)=>{
-    let color = d.data.logo ? "white" : "black";
-    return `0 1px 0 ${color}, 1px 0 0 ${color}, 0 -1px 0 ${color}, -1px 0 0 ${color}`
-  })
-  .style("text-align", "center")
-  .style("font-weight", "bolder")
-  .style("position", "absolute")
-  .style("min-width", "100%")
-  .style("padding", "10px")
-  .style("top", (d)=>(d.data.logo ? "0" : "50%"))
-  .style("transform", (d)=>(d.data.logo ? "translateY(-100%)" : "translateY(-80%)"))
-  .style("color", (d)=>(d.data.logo ? "black" : "white"))
-  .style("background", function(d) { return d.data.logo ? "" : `hsl(${Math.random()*360},100%,25%)`; })
-  .style("border-radius", function(d) { return d.data.logo ? "" : "20px"; })
-  .html(function(d) { return d.data.name; })
-    
-  html.append("xhtml:div")
-    .attr("class", "mouseover2")
-    .append("xhtml:img")
-    .attr("src", function(d) { return d.data.logo; })
-    .style("background", "white")
-    .style("display", function(d) { return d.data.logo ? "block" : "none"; })
-    .attr("width", 1.3*sz)
-    .attr("height", 1.3*sz)
-    .style("margin","auto")
-    .style("object-fit", "contain")
-    .style("object-position", "center")
-    .style("border-radius", "50%")
+  })();
 </script>
-
-

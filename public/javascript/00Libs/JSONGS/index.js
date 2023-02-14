@@ -10,10 +10,8 @@ function JSONGS_usarLocalStorage() {
         clases.forEach(clase => {
             console.log(clase)
             if (!regex.test(clase)) {
-                console.log("NO CUMPLE")
                 return;
             }
-            console.log("CUMPLE")
             let XY = localStorage.getItem(clase)
             if (XY) {
                 element.innerHTML = XY
@@ -22,15 +20,12 @@ function JSONGS_usarLocalStorage() {
     })
 }
 
-async function JSONGS_cargar(url, nombreLocalStorage, callback) {
-    let texto
+async function JSONGS_cargar(url, callback) {
+    let texto = localStorage.getItem(url)
     try {
         texto = await (await fetch(url)).text();
-        localStorage.setItem(nombreLocalStorage, texto)
+        localStorage.setItem(url, texto)
     } catch (error) {
-    }
-    if (!texto) {
-        texto = localStorage.getItem(nombreLocalStorage)
     }
     if (!texto) {
         return
