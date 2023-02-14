@@ -1,4 +1,4 @@
-console.log("JSONGS cargado! a3");
+console.log("JSONGS cargado! a4");
 
 (() => {
     let regex = /JSONGS--X--.*--Y--.*/g
@@ -6,12 +6,13 @@ console.log("JSONGS cargado! a3");
         let clases = element.classList;
         clases.forEach(clase => {
             if (!regex.test(clase)) {
+                console.log(clase,"NO CUMPLE")
                 return;
             }
+            console.log(clase, "CUMPLE")
             let XY = localStorage.getItem(clase)
             if (XY) {
                 element.innerHTML = XY
-                console.log("Local storage actualizado:", clase, "=", XY)
             }
         })
     })
