@@ -91,12 +91,12 @@
         .attr('width', width)
         .attr('height', height)
 
+    svg.on("load",  responsiveD3JS)
+
     svg.attr("id",'svg-graf-habilidades')
 
     //Redimensionar el gráfico svg cuando se redimensiona la ventana
     d3.select(window).on('resize', responsiveD3JS);
-
-    setTimeout(responsiveD3JS, 100);
 
     function responsiveD3JS() {
         let w = parseFloat(d3.select("#graf-habilidades").style("width").replace("px", ""))
@@ -445,7 +445,6 @@
 
   let sz = 60
   let txy = -30
-
 
   let tree = d3.tree()
       .size([2 * Math.PI, radius])
