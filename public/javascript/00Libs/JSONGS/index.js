@@ -1,4 +1,4 @@
-console.log("JSONGS cargado!")
+console.log("JSONGS cargado! a1")
 
 async function cargarJSONGS(url, nombreLocalStorage, callback) {
     let texto
