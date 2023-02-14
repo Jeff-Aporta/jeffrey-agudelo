@@ -1,4 +1,4 @@
-console.log("JSONGS cargado! a5");
+console.log("JSONGS cargado! a6");
 
 setTimeout(JSONGS_usarLocalStorage, 0);
 
