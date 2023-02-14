@@ -8,11 +8,12 @@ function JSONGS_usarLocalStorage() {
     document.querySelectorAll("*").forEach((element) => {
         let clases = element.classList;
         clases.forEach(clase => {
+            console.log(clase)
             if (!regex.test(clase)) {
-                console.log(clase,"NO CUMPLE")
+                console.log("NO CUMPLE")
                 return;
             }
-            console.log(clase, "CUMPLE")
+            console.log("CUMPLE")
             let XY = localStorage.getItem(clase)
             if (XY) {
                 element.innerHTML = XY
