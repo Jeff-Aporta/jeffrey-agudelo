@@ -27,7 +27,7 @@ async function JSONGS_cargar(url, nombreLocalStorage, callback) {
 }
 
 function JSONGS_XY(hoja_gs, X, Y) {
-    return hoja_gs.find((elemento) => elemento.id == X ? true : false)[Y]
+    return hoja_gs.find((elemento) => elemento.id == Y ? true : false)[X]
 }
 
 function JSONGS_sustituirValoresSegunClase(hoja_gs) {
