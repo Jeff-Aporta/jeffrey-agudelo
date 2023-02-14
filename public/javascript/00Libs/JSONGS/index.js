@@ -1,4 +1,20 @@
-console.log("JSONGS cargado! a2")
+console.log("JSONGS cargado! a3")
+
+(()=>{
+    let regex = /JSONGS--X--.*--Y--.*/g
+    document.querySelectorAll("*").forEach((element) => {
+        let clases = element.classList;
+        clases.forEach(clase => {
+            if (!regex.test(clase)) {
+                return;
+            }
+            let XY = localStorage.getItem(clase)
+            if (XY) {
+                element.innerHTML = XY
+            }
+        })
+    })
+})();
 
 async function JSONGS_cargar(url, nombreLocalStorage, callback) {
     let texto
@@ -44,6 +60,7 @@ function JSONGS_sustituirValoresSegunClase(hoja_gs) {
                 console.log(XY)
                 if (XY) {
                     element.innerHTML = XY
+                    localStorage.setItem(clase,XY)
                 }
             }
         })
