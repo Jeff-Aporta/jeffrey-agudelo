@@ -1,6 +1,6 @@
-console.log("JSONGS cargado! a1")
+console.log("JSONGS cargado! a2")
 
-async function cargarJSONGS(url, nombreLocalStorage, callback) {
+async function JSONGS_cargar(url, nombreLocalStorage, callback) {
     let texto
     try {
         texto = await (await fetch(url)).text();
@@ -20,21 +20,43 @@ async function cargarJSONGS(url, nombreLocalStorage, callback) {
         acumulado[headers[indice].trim()] = elemento.trim().replaceAll("\r", '')
         return acumulado;
     }, {}))
-
     if (callback) {
         await callback(hoja_gs);
     }
-
     return hoja_gs;
 }
 
-function adjuntarLibreriasEnHeader(hoja_gs, regla) {
+function JSONGS_XY(hoja_gs, X, Y) {
+    return hoja_gs.find((elemento) => elemento.id == X ? true : false)[Y]
+}
+
+function JSONGS_sustituirValoresSegunClase(hoja_gs) {
+    //JSONGS--X--html--Y--0001
+    let regex = /JSONGS--X--.*--Y--.*/g
+    document.querySelectorAll("*").forEach((element) => {
+        let clases = element.classList;
+        clases.forEach(clase => {
+            if (regex.test(clase)) {
+                let params = clase.split("--")
+                let X = params[2]
+                let Y = params[4]
+                let XY = JSONGS_XY(hoja_gs, X, Y)
+                console.log(XY)
+                if (XY) {
+                    element.innerHTML = XY
+                }
+            }
+        })
+    })
+}
+
+function JSONGS_adjuntarLibreriasEnHeader(hoja_gs, regla) {
     if (!regla) {
         console.log("No hay regla en adjuntar librerias en header");
         return
     }
     hoja_gs.forEach(element => {
-        let url = regla?regla(element):"";
+        let url = regla ? regla(element) : "";
         if (url) {
             let script = document.createElement(url.endsWith('js') ? 'script' : 'link')
             script[url.endsWith('js') ? 'src' : 'href'] = url;
