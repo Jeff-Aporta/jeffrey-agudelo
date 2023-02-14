@@ -34,7 +34,6 @@ function adjuntarLibreriasEnHeader(hoja_gs, regla) {
         return
     }
     hoja_gs.forEach(element => {
-        console.log(element)
         let url = regla?regla(element):"";
         if (url) {
             let script = document.createElement(url.endsWith('js') ? 'script' : 'link')
