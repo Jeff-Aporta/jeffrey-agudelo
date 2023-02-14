@@ -21,7 +21,9 @@ async function cargarJSONGS(url, nombreLocalStorage, callback) {
         return acumulado;
     }, {}))
 
-    await callback();
+    if (callback) {
+        await callback();
+    }
 
     return hoja_gs;
 }
