@@ -23,3 +23,19 @@ async function cargarJSONGS(url, nombreLocalStorage, callback) {
 
     return hoja_gs;
 }
+
+function adjuntarLibreriasEnHeader(regla) {
+    if (!regla) {
+        console.log("No hay regla en adjuntar librerias en header");
+        return
+    }
+    hoja_gs.forEach(element => {
+        console.log(element)
+        let url = regla(element)
+        if (url) {
+            let script = document.createElement(url.endsWith('js') ? 'script' : 'link')
+            script[url.endsWith('js') ? 'src' : 'href'] = url;
+            document.getElementsByTagName('head')[0].appendChild(script)
+        }
+    });
+}
