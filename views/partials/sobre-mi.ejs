@@ -24,16 +24,13 @@
     }
 </style>
 <ul class="nav nav-tabs" id="tabs-yo" role="tablist">
+
     <li class="nav-item" role="presentation">
-        <button class="nav-link active" id="tab-desc-person" data-bs-toggle="tab" data-bs-target="#content-desc-person" type="button" role="tab" aria-controls="content-desc-person" aria-selected="true">
-                Descripción personal
-        </button>
-    </li>
-    <li class="nav-item" role="presentation">
-        <button class="nav-link" id="tab-map-hab" data-bs-toggle="tab" data-bs-target="#content-map-hab" type="button" role="tab" aria-controls="content-map-hab" aria-selected="false" onclick="setTimeout(responsiveD3JS, 200);">
+        <button class="nav-link active" id="tab-map-hab" data-bs-toggle="tab" data-bs-target="#content-map-hab" type="button" role="tab" aria-controls="content-map-hab" aria-selected="true" onclick="setTimeout(responsiveD3JS, 200);">
                 Mapa de habilidades
         </button>
     </li>
+
     <li class="nav-item" role="presentation">
         <button class="nav-link" id="tab-fotos" data-bs-toggle="tab" data-bs-target="#content-fotos" type="button" role="tab" aria-controls="content-fotos" aria-selected="false">
             Fotos
@@ -46,35 +43,10 @@
     </li>
 </ul>
 <div class="tab-content" id="content-yo">
-    <div class="tab-pane fade show active" id="content-desc-person" role="tabpanel" aria-labelledby="tab-desc-person" >
-        <h4>
-            Desarrollador de Software
-        </h4>
-        Tengo una amplia experiencia en encontrar soluciones matemáticas eficientes y me destaco por el rendimiento de mis proyectos. Además, tengo un fuerte conocimiento en computación gráfica y estoy constantemente buscando nuevas formas de mejorar mis habilidades y aprender sobre las últimas tendencias en el campo.
-        <br> <br>
-        <h4>
-            Pasión por la Enseñanza de Algoritmos
-        </h4>
-        Además de mi experiencia en el desarrollo de software, tengo un gran interés en la enseñanza de algoritmos y he creado un canal de YouTube para compartir mis conocimientos. Quiero ayudar a la comunidad a comprender y apreciar los algoritmos y la programación de una manera clara y accesible.
-        <br> <br>
-        <center>
-            <a href="https://www.youtube.com/@JeffAportaa" style="font-size: 200%;color: black;text-decoration: none;display: inline-flex;align-items: center;justify-content: center;border: 1px solid lightgray;padding: 10px; border-radius: 10px;">
-                <i class="fab fa-youtube" style="color: red;font-size: 150%;"></i> &nbsp; Jeff Aporta
-            </a>
-        </center>
-        <br> <br>
-        <h4>
-            Valores y Estilo de Vida
-        </h4>
-        Me considero una persona de valores y principios sólidos, soy pentecostal y llevo una vida saludable, no fumo, no bebo alcohol, estoy casado y no tengo hijos. Me gusta mucho dibujar y pintar, y disfruto pasar tiempo en casa. Soy una persona de pocos amigos, pero los selecciono muy bien, y tengo un alto compromiso con mis actividades.
-        <br> <br>
-        <h4>
-            Compromiso y Confiabilidad
-        </h4>
-        Mi experiencia, habilidades y valores me hacen ser un desarrollador confiable y comprometido con sus actividades y con una vida equilibrada y saludable. Pueden contar conmigo para encontrar soluciones eficientes y completar proyectos a un alto nivel de calidad.
-    </div>
-    <div class="tab-pane fade" id="content-map-hab" role="tabpanel" aria-labelledby="tab-map-hab" >
+
+    <div class="tab-pane fade show active" id="content-map-hab" role="tabpanel" aria-labelledby="tab-map-hab" >
         <%- include("graf-habilidades.ejs") %> 
+        <%- include("desc-person.ejs") %> 
     </div>
     <div class="tab-pane fade" id="content-fotos" role="tabpanel" aria-labelledby="tab-fotos" >
     </div>
@@ -131,49 +103,3 @@
         lightbox_load()
     }, 0);
 </script>
-
-<hr>
-
-
-<div>
-    <div style="padding: 20px;">
-        <%- include("sobre-mi-01.ejs") %> 
-    </div>
-    <hr>
-    <div style="padding: 20px;">
-        <%- include("sobre-mi-02.ejs") %> 
-    </div>
-    <hr>
-    <div style="background: hsl(150, 100%, 80%);padding: 20px;">
-        <%- include("sobre-mi-03.ejs") %> 
-    </div>
-    <hr>
-    <div style="background: hsl(200, 100%, 80%);padding: 20px;">
-        <%- include("sobre-mi-04.ejs") %> 
-    </div>
-</div>
-<script>
-    document.querySelectorAll(".auto-ver-mas").forEach(e=>{
-        let id = (Math.random()+"").replaceAll("0.","id-")
-        let saltos = e.innerHTML.split("<br>")
-        let primerParrafo = saltos.shift()
-        let resto = saltos.join("<br>")
-        e.innerHTML = primerParrafo
-        e.innerHTML += `<div class="ver-mas" style="display: none;" id="content-ver-mas-${id}">${resto}</div>`
-        e.innerHTML += `
-            <div class="ver-mas" style="display: inline;"> 
-                <a 
-                    href="javascript:void(0)" 
-                    id="btn-ver-mas-${id}"
-                    class="btn btn-light"
-                    onclick="
-                        this.style.display='none';
-                        document.getElementById('content-ver-mas-${id}').style.display='';
-                    "
-                >
-                    Ver más
-                </a>
-            </div>`
-    })
-</script>
-<br> 
