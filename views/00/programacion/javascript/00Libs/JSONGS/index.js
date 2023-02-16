@@ -1,14 +1,13 @@
-console.log("JSONGS cargado! a8");
+console.log("JSONGS cargado! a9");
 
-document.addEventListener("load",JSONGS_usarLocalStorage)
-setTimeout(JSONGS_usarLocalStorage, 10);
+document.addEventListener("load",JSONGS_localStorageClasesEspecialesCSS)
+setTimeout(JSONGS_localStorageClasesEspecialesCSS, 10);
 
-function JSONGS_usarLocalStorage() {
+function JSONGS_localStorageClasesEspecialesCSS() {
     let regex = /JSONGS--X--.*--Y--.*/g
     document.querySelectorAll("*").forEach((element) => {
         let clases = element.classList;
         clases.forEach(clase => {
-            console.log(clase)
             if (!regex.test(clase)) {
                 return;
             }
@@ -21,12 +20,14 @@ function JSONGS_usarLocalStorage() {
 }
 
 async function JSONGS_cargar(url, callback) {
-    let texto = localStorage.getItem(url)
-    try {
-        texto = await (await fetch(url)).text();
-        localStorage.setItem(url, texto)
-    } catch (error) {
-    }
+    let texto = localStorage.getItem(url);
+    (async ()=>{
+        try {
+            texto = await (await fetch(url)).text();
+            localStorage.setItem(url, texto)
+        } catch (error) {
+        }
+    })();
     if (!texto) {
         return
     }
@@ -47,23 +48,21 @@ function JSONGS_XY(hoja_gs, X, Y) {
     return hoja_gs.find((elemento) => elemento.id == Y ? true : false)[X]
 }
 
-function JSONGS_sustituirValoresSegunClase(hoja_gs) {
-    //JSONGS--X--html--Y--0001
+function JSONGS_clasesEspecialesCSS(hoja_gs) {
     let regex = /JSONGS--X--.*--Y--.*/g
     document.querySelectorAll("*").forEach((element) => {
         let clases = element.classList;
         clases.forEach(clase => {
-            if (regex.test(clase)) {
-                let params = clase.split("--")
-                let X = params[2]
-                let Y = params[4]
-                let XY = JSONGS_XY(hoja_gs, X, Y)
-                console.log(XY)
-                if (XY) {
-                    element.innerHTML = XY
-                    localStorage.setItem(clase, XY)
+                if (regex.test(clase)) {
+                    let params = clase.split("--")
+                    let X = params[2]
+                    let Y = params[4]
+                    let XY = JSONGS_XY(hoja_gs, X, Y)
+                    if (XY) {
+                        element.innerHTML = XY
+                        localStorage.setItem(clase, XY)
+                    }
                 }
-            }
         })
     })
 }

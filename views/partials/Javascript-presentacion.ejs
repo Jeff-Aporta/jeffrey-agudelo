@@ -1,68 +1,213 @@
+<style>
+    .item-proj{
+        padding: 10px;
+        margin: 5px;
+        color:white;
+        border-radius:5px;
+        display:inline-block;
+        cursor: pointer;
+        text-align: center;
+        transition: all 0.25s;
+        border: 2px solid rgba(0, 0, 0, 0.3);
+        text-shadow: -2px 2px 1px rgba(0, 0, 0, 0.5), 2px -2px 1px rgba(0, 0, 0, 0.5), -2px -2px 1px rgba(0, 0, 0, 0.5), 2px 2px 1px rgba(0, 0, 0, 0.5) , 0 -2px 1px rgba(0, 0, 0, 0.5), 0 2px 1px rgba(0, 0, 0, 0.5) ;
+        box-shadow: inset 5px -5px 5px rgba(0,0,0,0.1), 
+        inset 3px -3px 5px rgba(0,0,0,0.1),
+         inset 1px -1px 5px rgba(0,0,0,0.2),
+         inset -5px 5px 5px rgba(255,255,255,0.1), 
+        inset -3px 3px 5px rgba(255,255,255,0.1),
+         inset -1px 1px 5px rgba(255,255,255,0.2);
+    }
+
+   .desc{
+        display: none;
+    }
+    .item-proj:hover .desc{
+        display: block;
+    }
+    .item-proj:hover{
+        filter: brightness(1.2);
+        transform: scale(1.1);
+        box-shadow: -5px 5px 5px rgba(0,0,0,0.3), 
+        inset 5px -5px 5px rgba(0,0,0,0.1), 
+        inset 3px -3px 5px rgba(0,0,0,0.1),
+         inset 1px -1px 5px rgba(0,0,0,0.2),
+         inset -5px 5px 5px rgba(255,255,255,0.1), 
+        inset -3px 3px 5px rgba(255,255,255,0.1),
+         inset -1px 1px 5px rgba(255,255,255,0.2);
+    }
+</style>
+
 <div style="background: white;padding: 10px;">
 <h1 style="text-align: center;padding: 50px;background: gold;font-size: 500%;">
     JavaScript
 </h1>
 <br>
-Soy un apasionado de JavaScript 🚀. Me encanta la versatilidad y el poder que tiene este lenguaje 💪, y disfruto cada momento que paso aprendiendo y programando en él 🤓.
+<strong>Soy un apasionado de JavaScript</strong> 🚀. Me encanta la versatilidad y el poder que tiene este lenguaje 💪, y disfruto cada momento que paso aprendiendo y programando en él 🤓.
 <br><br>
 Desde que descubrí JavaScript, he estado profundizando en su uso y tratando de aprender todo lo que puedo 💻. Me encanta experimentar con nuevas técnicas y trucos, y siempre estoy buscando formas de mejorar mi código 🎯. Creo que JavaScript es uno de los lenguajes más interesantes e importantes del mundo de la programación actual 🌎, y me siento afortunado de poder trabajar y crear con él 🙏.
 <br><br>
 Siempre estoy buscando formas de mejorar mis habilidades en JavaScript y mantenerme al día con las últimas tendencias y desarrollos 🔍. Espero poder seguir aprendiendo y creciendo como desarrollador de JavaScript y seguir explorando las infinitas posibilidades que ofrece este lenguaje 🤩.
 <br><br>
-<h1 style="text-align: center;">
-    Proyectos
-</h1>
 
 <div id="proyectos-js">
 </div>
 
 <script>
-    function proj_js(){
-        let proyectos = document.getElementById("proyectos-js");
-        function crearProyecto(proyecto){
-            if(proyecto.elementos){
-                proyectos.innerHTML += `
-                    <div style="background: deeppink;padding: 10px;">
-                        <h2>${proyecto.path}</h2>
-                        <p>${proyecto.descripcion}</p>
-                    </div>
-                `;
+    let proyectos_js;
+
+
+    (async function () {
+        let url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRgAKWOvIQ05rKJc2aWjxqNxgpD3sSILX4gloIq4QeX7o4mFJE8E5R8KRLZ3CiutgHOyHiVszjoiwQO/pub?gid=2129325617&single=true&output=tsv"
+        JSONGS_cargar(url, (hoja_gs) => {
+            let raiz = hoja_gs.find(elemento => elemento.parent == "-1")
+            encontrarDescendencia(raiz)
+            function encontrarDescendencia(node) {
+                if (!node) {
+                    return
+                }
+                node.elementos = hoja_gs.filter(test => test.parent == node.id)
+                node.elementos.forEach(child => {
+                    encontrarDescendencia(child)
+                })
             }
-            let div = document.createElement("div");
-            div.style = "background: deeppink;padding: 10px;";
-            div.innerHTML = `
-                <h2>${proyecto.path}</h2>
-                <p>${proyecto.descripcion}</p>
-            `;
+            proyectos_js = raiz
+            console.log(proyectos_js)
+            proj_js()
+            })
+    })();
+
+    function proj_js(){
+        let html = `
+            <div style="padding: 20px;box-shadow: -5px 0 5px rgba(0,0,0,0.3)">
+                <h1 style="text-align: center;">
+                    Proyectos 🚀
+                </h1>
+                Durante mi carrera como desarrollador, he tenido la oportunidad de trabajar en una amplia variedad de proyectos interesantes para empresas, utilizando JavaScript en la mayoría de ellos.
+                <br>
+                <br>
+        `
+        let h = 0
+        function generarElementosHTML(proyecto, url,retorno=[]){
+            console.log(proyecto)
+            if (!url) {
+                url = proyecto.path
+            }else{
+                url += proyecto.path
+            }
+            if(proyecto.elementos.length){
+                let _html =""
+                if (proyecto.name || proyecto.descripcion) {
+                    _html = `
+                    <div
+                        class="
+                        ${
+                            proyecto.profundidad >= proyectos_js.extension-2 ? `
+                                switchw--display--flex--if-up-1000px-else--inline-block
+                                switchw--flex-direction--column--if-up-1000px-else--row
+                                switchw--width--100P--if-less-1000px-else--47P
+                                switchw--margin--10px_0--if-less-1000px-else--10px_10px
+                            `:""
+                        }
+                        " 
+                        style="justify-content:space-between;padding: 20px;box-shadow: -5px 0 5px rgba(0,0,0,0.3);border:2px solid rgba(0,0,0,0.1);">
+                           <div>
+                                <h2>${proyecto.name??""}</h2>
+                                ${proyecto.descripcion??""}
+                           </div>
+                            <br>
+                            <br>
+                    `;
+                }
+                let elementos = []
+                proyecto.elementos.forEach((elemento)=>{
+                    generarElementosHTML(elemento,url,elementos)
+                })
+                _html+=`
+                    <center>
+                `
+                _html+=elementos.filter(e=>e.tipo=="hoja").map(e=>e.html).join("")
+                _html+=`
+                    </center>
+                `
+                let ramas = elementos.filter(e=>e.tipo=="rama")
+                if (ramas.length) {
+                    _html+=`
+                        <br>
+                        <br>
+                        <div style="display:flex;justify-content:space-between;align-items:stretch;flex-wrap:wrap;">
+                    `
+                    _html+=ramas.map(e=>e.html).join("")
+                    _html+=`
+                        </div>
+                    `
+                }
+                if (proyecto.name || proyecto.descripcion) {
+                    _html+=`</div>`
+                }
+                retorno.push({
+                    tipo: "rama",
+                    html:_html
+                })
+            }else{
+                retorno.push({
+                    tipo: "hoja",
+                    html:`
+                        <a href="${url}" target="_blank">
+                            <div class="item-proj" style="background: hsl(${h+=5},100%,50%);">
+                                <strong>
+                                    ${proyecto.logo?`<img src='${proyecto.logo}' style="width:50px;height:50px;object-fit:cover;background:rgba(0,0,0,0.2);border-radius:10px;border:1px solid rgba(255,255,255,0.5)">`:""} 
+                                    <big>
+                                        <big>
+                                            ${proyecto.name}
+                                        </big>
+                                    </big>
+                                </strong>
+                                <br>
+                                    ${proyecto.descripcion?`
+                                        <small>
+                                            <small>
+                                                ${proyecto.descripcion}
+                                            </small>
+                                        </small>
+                                    `:""}
+                            </div>
+                        </a>
+                    `
+                })
+            }
         }
-        proyectos_js.forEach(proyecto => {
-            
-        });
+        function contarNiveles(proyecto,nivel = 0){
+            let max = nivel
+            if (proyecto.elementos) {
+                proyecto.elementos.forEach(elemento=>{
+                    let lvl = contarNiveles(elemento,nivel+1)
+                    elemento.profundidad = Math.max(lvl,nivel)
+                })
+            }
+            proyecto.profundidad = max
+            return max
+        }
+        function profundidadMaxima(proyecto){
+            let max = proyecto.profundidad
+            if (proyecto.elementos) {
+                proyecto.elementos.forEach(elemento=>{
+                    max = Math.max(max,profundidadMaxima(elemento))
+                })
+            }
+            return max
+        }
+
+        contarNiveles(proyectos_js)
+        proyectos_js.extension = profundidadMaxima(proyectos_js)
+
+
+        elementos = []
+        generarElementosHTML(proyectos_js, "",elementos)
+        html += elementos.map(e=>e.html).join("")
+        html+=`</div>`
+        let proyectos = document.getElementById("proyectos-js");
+        proyectos.innerHTML = html
     }
 
-    let proyectos_js = {
-        path: "/00/programacion/javascript/",
-        elementos: [
-             {
-                name: "Librerias",
-                path: "00Libs/",
-                descripcion:"Pendiente",
-                elementos: [
-                    {
-                        name: "betterCallSaul.js", 
-                        path: "betterCallSaul",
-                        files: ["betterCallSaul.js", "betterCallSaul.min.js"],
-                        descripcion: "Pendiente"
-                    }
-                ]
-            }, 
-            {
-                name:"Algoritmos",
-            },
-            {
-                name: "Aplicativos"
-            },
-        ]
-    }
 </script>
 </div>

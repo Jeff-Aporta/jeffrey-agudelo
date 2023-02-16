@@ -1,5 +1,4 @@
 <script src="https://d3js.org/d3.v6.min.js"></script>
-<script src="/javascript/00Libs/JSONGS/index.js"></script>
 
 <div id="graf-habilidades">
 </div>
@@ -106,7 +105,7 @@
     svg.style("transform-origin", "0 0");
   }
 
-  let root
+  let root;
 
   (async function () {
     let url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRgAKWOvIQ05rKJc2aWjxqNxgpD3sSILX4gloIq4QeX7o4mFJE8E5R8KRLZ3CiutgHOyHiVszjoiwQO/pub?output=tsv"
@@ -123,8 +122,6 @@
         })
       }
       root = raiz
-
-
 
       let data = d3.hierarchy(root);
 

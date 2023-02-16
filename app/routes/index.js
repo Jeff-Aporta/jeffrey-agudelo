@@ -71,7 +71,7 @@ function buscarRuta(req, res, next) {
   if (args.ext == ".ejs") {
     res.render(args.fullpath, args);
   } else {
-    res.sendFile(args.fullpath);
+    res.sendFile(args.fullpath, { root: "./views" });
   }
 }
 
