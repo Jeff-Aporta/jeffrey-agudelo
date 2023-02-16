@@ -8,7 +8,7 @@
 
 <style>
   svg {
-    border: solid 2px #ccc;
+    border: solid 2px rgba(0,0,0,0.5);
   }
 
   .link {
@@ -49,7 +49,7 @@
   }
 
   .mouseover2 img {
-    border: 2px solid gray;
+    border: 2px solid rgba(0,0,0,0.5);
   }
 
   @keyframes animacion2 {
@@ -58,7 +58,7 @@
     }
 
     100% {
-      color: lightgray;
+      color: rgba(0,0,0,0.5);
     }
   }
 
@@ -68,7 +68,7 @@
     }
 
     100% {
-      border: 3px solid lightgray;
+      border: 3px solid rgba(0,0,0,0.5);
     }
   }
 </style>
@@ -87,7 +87,8 @@
     .append('svg')
     .attr('width', width)
     .attr('height', height)
-    .style("background","radial-gradient(circle, lightblue 0%, dodgerblue 100%)")
+    .style("background","radial-gradient(circle, white 0%, lightblue 50%, dodgerblue 100%)")
+    .style("border-radius","50px")
 
   svg.on("load", responsiveD3JS)
 
