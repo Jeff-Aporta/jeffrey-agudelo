@@ -2,6 +2,7 @@
     .item-proj{
         padding: 10px;
         margin: 5px;
+        vertical-align: middle;
         color:white;
         border-radius:5px;
         display:inline-block;
@@ -71,7 +72,6 @@ Siempre estoy buscando formas de mejorar mis habilidades en JavaScript y mantene
                 })
             }
             proyectos_js = raiz
-            console.log(proyectos_js)
             proj_js()
             })
     })();
@@ -86,9 +86,7 @@ Siempre estoy buscando formas de mejorar mis habilidades en JavaScript y mantene
                 <br>
                 <br>
         `
-        let h = 0
         function generarElementosHTML(proyecto, url,retorno=[]){
-            console.log(proyecto)
             if (!url) {
                 url = proyecto.path
             }else{
@@ -101,7 +99,7 @@ Siempre estoy buscando formas de mejorar mis habilidades en JavaScript y mantene
                     <div
                         class="
                         ${
-                            proyecto.profundidad >= proyectos_js.extension-2 ? `
+                            proyecto.profundidad >= proyectos_js.extension-1 ? `
                                 switchw--display--flex--if-up-1000px-else--inline-block
                                 switchw--flex-direction--column--if-up-1000px-else--row
                                 switchw--width--100P--if-less-1000px-else--47P
@@ -109,7 +107,7 @@ Siempre estoy buscando formas de mejorar mis habilidades en JavaScript y mantene
                             `:""
                         }
                         " 
-                        style="justify-content:space-between;padding: 20px;box-shadow: -5px 0 5px rgba(0,0,0,0.3);border:2px solid rgba(0,0,0,0.1);">
+                        style="justify-content:space-between;padding: 20px;box-shadow: -5px 0 5px rgba(0,0,0,0.3);border:2px solid rgba(0,0,0,0.1);width:100%;margin:10px 0">
                            <div>
                                 <h2>${proyecto.name??""}</h2>
                                 ${proyecto.descripcion??""}
@@ -153,7 +151,7 @@ Siempre estoy buscando formas de mejorar mis habilidades en JavaScript y mantene
                     tipo: "hoja",
                     html:`
                         <a href="${url}" target="_blank">
-                            <div class="item-proj" style="background: hsl(${h+=5},100%,50%);">
+                            <div class="item-proj">
                                 <strong>
                                     ${proyecto.logo?`<img src='${proyecto.logo}' style="width:50px;height:50px;object-fit:cover;background:rgba(0,0,0,0.2);border-radius:10px;border:1px solid rgba(255,255,255,0.5)">`:""} 
                                     <big>
@@ -207,6 +205,12 @@ Siempre estoy buscando formas de mejorar mis habilidades en JavaScript y mantene
         html+=`</div>`
         let proyectos = document.getElementById("proyectos-js");
         proyectos.innerHTML = html
+
+        let h = 0
+
+        proyectos.querySelectorAll(".item-proj").forEach((elemento,index,array)=>{
+            elemento.style.background = `hsl(${360*index/(array.length-1)},100%,50%)`
+        })
     }
 
 </script>

@@ -1,3 +1,5 @@
 node_modules
 *.ini
 *.ico
+public/zip/*
+*/secretKeys/index.js

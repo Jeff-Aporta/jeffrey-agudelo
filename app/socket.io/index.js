@@ -1,31 +1,16 @@
 module.exports = function (app_pack) {
-    let { io, google } = app_pack;
+    let { io, zip,openai } = app_pack;
 
     io.on('connection', function (socket) {
-        socket.on('comprobar información de inicio de sesión', async function (userTest) {
-            let user = await google.users.getUser(userTest.celular)
-            if (user) {
-                if (userTest.clave == user.clave) {
-                    io.to(socket.id).emit("información de inicio de sesión: CORRECTA");
-                } else {
-                    io.to(socket.id).emit("información de inicio de sesión: CLAVE INCORRECTA");
-                }
-            } else {
-                io.to(socket.id).emit("información de inicio de sesión: CELULAR INCORRECTO");
-            }
+
+        socket.on("Comprimir ZIP",(rutaCarpeta)=>{
+            io.to(socket.id).emit("descargar archivo desde URL",zip.comprimirZIP(rutaCarpeta));
         })
-        socket.on('registrar usuario', async function (userTest) {
-            let user = await google.users.getUser(userTest.celular)
-            if (user) {
-                io.to(socket.id).emit("usuario ya existe");
-                return
-            } else {
-                if (await google.users.addUser(userTest)) {
-                    io.to(socket.id).emit("registro exitoso");
-                }else{
-                    io.to(socket.id).emit("usuario ya existe");
-                }
-            }
-        });
+
+        socket.on("generar DALL-E 2",async (prompt,numberOfImages)=>{
+            let dalle2 = await openai.dalle2.generar(prompt,numberOfImages)
+            io.to(socket.id).emit("respuesta DALL-E 2", dalle2);
+        })
+
     });
 }

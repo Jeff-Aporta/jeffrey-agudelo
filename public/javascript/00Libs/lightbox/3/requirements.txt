@@ -1,6 +1,0 @@
-timm
-torch~=1.8
-torchvision
-opencv-python-headless
-numpy
-Pillow

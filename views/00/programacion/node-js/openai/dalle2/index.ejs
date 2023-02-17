@@ -1,0 +1,118 @@
+<%- include(path.split("/").map(_=>"..").join("/")+"/partials/header.ejs",{title:""}) %>
+
+<style>
+    label:has(input[type=radio]){
+        padding: 10px;
+        font-weight: bolder;
+        cursor: pointer;
+    }
+    label:has(input[type=radio]:checked){
+        background: dodgerblue;
+    }
+    label:has(input[type=radio]:not(:checked)){
+        background: darkslategray;
+    }
+    label:has(input[type=radio]) input[type=radio]{
+        display: none;
+    }
+
+    .swal2-input{
+        margin: 0;
+    }
+</style>
+
+<div style="padding: 20px">
+    <div style="display: inline-block;">
+        Número de imágenes
+        <br>
+        <input class="swal2-input" type="number" id="numimgs" min="1" max="4" value="1" style="background: white;">
+    </div>
+    <textarea class="swal2-textarea" id="prompt" rows="5" placeholder="Entrada generadora" style="width: 100%;background: white;">Baby fox playing guitar, digital art</textarea>
+    <center>
+        <div class="btn btn-dark" onclick="generar()">
+            GENERAR
+        </div>
+    </center>
+    <br>
+    <center>
+        <div id="consulta-dalle2" style="border: 1px solid lightgray;padding: 20px;">
+            Aún nada generado
+        </div>
+    </center>
+</div>
+
+
+<center>
+    <h1>Imágenes generadas <span id="count-imagenes-generadas"></span></h1>
+    <div id="imagenes-generadas">
+    </div>
+</center>
+
+<script>
+
+    let consultando = false
+
+    function generar(){
+        if (consultando) {
+            console.log("Acción bloqueada")
+            return
+        }
+        consultando=true
+        let prompt = document.getElementById("prompt").value
+        let numberOfImages = parseFloat(document.getElementById("numimgs").value)
+        socket.emit("generar DALL-E 2",prompt,numberOfImages)
+        document.getElementById("consulta-dalle2").innerHTML = `
+            <div class="lds-circle"><div></div></div>
+        `
+    }
+
+    socket.on("respuesta DALL-E 2",obj=>{
+        let html = ""
+        obj.imgbbnews.forEach(element => {
+            html += `<img class="miniatura" src="${element.thumb.url}" data-lightbox-group="2" data-lightbox="${element.image.url}"> `;
+        });
+        document.getElementById("consulta-dalle2").innerHTML = html
+        cargarImagenesGeneradas()
+        setTimeout(() => {
+            lightbox_load()
+        }, 100);
+        consultando = false
+    })
+
+
+    async function cargarImagenesGeneradas(){
+        let imagenes = await (await fetch("/IMGBB.json")).json()
+        let html = `
+            <div style="display:flex;justify-content:center;align-items:stretch;flex-wrap:wrap;">
+        `
+        imagenes.reverse()
+        imagenes.forEach(element => {
+            let p = element.prompt??"."
+            let p2 = p
+            if (p.length>30) {
+                p2 = p.substr(0,30)+"..."
+            }
+            html+= `
+                <div style="display:inline-block">
+                    <img class="miniatura2" src="${element.thumb.url}" data-lightbox-group="1" data-lightbox="${element.image.url}" title="${p}"> 
+                    <center style="width:120px;cursor:pointer;user-select:none;" title="${p}" onclick="document.getElementById('prompt').value = '${p}';">
+                        <small>
+                            ${p2}
+                        </small>
+                    </center>
+                </div>
+            `;
+        });
+        html += `
+            </div>
+        `
+        document.getElementById("imagenes-generadas").innerHTML = html
+        document.getElementById("count-imagenes-generadas").innerHTML = "("+imagenes.length+")"
+    }
+
+    cargarImagenesGeneradas()
+</script>
+
+<br> <br>
+
+<%- include(path.split("/").map(_=>"..").join("/")+"/partials/footer.ejs",{title:""}) %>

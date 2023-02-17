@@ -1,6 +1,6 @@
 const { GoogleSpreadsheet } = require("google-spreadsheet")
 
-const config = require("../config");
+const config = require("../../config");
 const fetch = require("node-fetch")
 const credenciales = config.spreadsheets
 

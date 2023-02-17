@@ -61,15 +61,7 @@
 
 <br>
 <br>
-<style>
-    .miniatura {
-        width: 200px;
-        height: 200px;
-        margin: 10px;
-        object-fit: cover;
-        cursor: pointer;
-    }
-</style>
+
 <script>
     {
         let html = `
@@ -91,15 +83,4 @@
         `;
         document.getElementById("content-fotos").innerHTML = html;
     }
-
-    lightbox_update_style({
-        background: "rgba(0,0,0,0.5)",
-        background2: "rgba(0,0,0,0.5)",
-        colorButtons: "white",
-        colorBorder: "black",
-    })
-
-    setTimeout(() => {
-        lightbox_load()
-    }, 0);
 </script>
